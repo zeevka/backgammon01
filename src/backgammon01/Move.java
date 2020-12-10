@@ -1,0 +1,139 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package backgammon01;
+
+
+import backgammon01.Server.Handler.color;
+import backgammon01.square.ColorStatus;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+/**
+ *
+ * @author zeev7
+ */
+public class Move {
+
+    public Move(board moveBoard,color thisColor) {
+
+        this.moveBoard=moveBoard;
+        this.thisColor=thisColor;
+        moveBoard.print();
+        steps =startMove();
+        
+        
+        
+        
+    }
+public Move(board moveBoard,color thisColor, int stam) {
+
+        this.moveBoard=moveBoard;
+        this.thisColor=thisColor;
+        moveBoard.print();
+        steps =startMove();
+        
+        game();
+        
+        
+    }
+
+protected color thisColor;
+protected int step1,step2;
+protected int [] XXXXXXCange;
+protected board moveBoard;
+ArrayList<Integer> steps = new ArrayList<Integer>();    
+    
+
+    public ArrayList<Integer> startMove(){
+    
+        ArrayList<Integer> tmp = new ArrayList<Integer>
+                                (Arrays.asList(dice(),dice()));
+
+        if (tmp.get(0)==tmp.get(1)) {
+            
+            tmp.addAll(Arrays.asList(tmp.get(0),tmp.get(0)));
+        }
+    
+        System.out.println(tmp.get(0)+" "+tmp.get(1));
+        
+        if(thisColor==color.black){
+        for(int i=0;i<tmp.size();i++){
+            
+            tmp.set(i,tmp.get(i)*-1);
+            
+        }
+      //  for(int i =0; i<tmp.size();i++){System.out.println(tmp.get(i));}
+    }
+        
+        return tmp;
+    }
+    
+    
+    private int dice(){
+        Random rand = new Random();
+        return rand.nextInt(6)+1;
+    }
+    
+    public void game(){
+    Scanner in = new Scanner(System.in);
+    int tmp,thestep;
+    
+    for(int index=0;index<steps.size();index++){
+           tmp = in.nextInt();
+           thestep=steps.get(index);
+            while (!(moveBoard.chekForOut(tmp, thisColor))||
+                    !(moveBoard.chekForIn(tmp+thestep , thisColor))) {            
+                System.out.println("error");
+                tmp = in.nextInt();
+            }
+           moveBoard.theMove(thisColor,tmp, tmp + thestep);
+       }
+    }
+
+    /*    private void findPlace(){
+    ColorStatus squareColor= moveBoard.change(thisColor);
+    int reelstep1 = step1*-1;
+    int reelstep2 = step2*-1;
+    
+    for(int index = 0;index<24;index++){
+    
+    if(moveBoard.)
+    
+    }
+    
+    }*/
+    /*
+    for themove
+    
+            
+        place1 = in.nextInt();
+        while (!(moveBoard.chekForOut(place1, thisColor))||
+                !(moveBoard.chekForIn(place1, thisColor))) {            
+            System.out.println("error");
+            place1 = in.nextInt();
+        }
+        moveBoard.theMove(thisColor,place1, place1 + step1);
+        
+        ///
+        place2 = in.nextInt();
+        while (!(moveBoard.chekForOut(place1, thisColor))||
+                !(moveBoard.chekForIn(place1, thisColor))) {            
+            System.out.println("error");
+            place1 = in.nextInt();
+        }
+        
+        
+        moveBoard.theMove(thisColor,place1,place1 + step2);
+       
+    
+    
+    */
+
+    
+
+}
