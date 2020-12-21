@@ -6,6 +6,7 @@
 package backgammon01;
 
 import backgammon01.Server.Handler;
+import backgammon01.Server.Handler.color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class turn {
 private board turnBoard;    
 private Handler.color playerColor;
 private int step1,step2;
-
+private int numOfKills;
 ArrayList<Integer> steps = new ArrayList<Integer>();   
     
     
@@ -56,4 +57,55 @@ ArrayList<Integer> steps = new ArrayList<Integer>();
         return tmp;
     }
     
+    public int getNumOfKills(color playerColor){
+    
+        int tmp =1;
+        if(playerColor==color.black){
+        tmp =26;
+        }
+        return turnBoard.getNum(tmp);
+    } 
+        public boolean chekTOout() {
+
+        int sum = 0, num, plase,i;
+        
+        if (playerColor == Handler.color.whith) {
+            num = 20;
+            plase = 27;
+        } else {
+            num = 2;
+            plase = 0;
+        }
+
+        for (i = 0; i > 6; i++) {
+            if (turnBoard.getStatus(num+i)==turnBoard.change(playerColor)) {
+                sum += turnBoard.getNum(num+i);
+            }
+        }
+
+        if (sum == (15-turnBoard.getNum(plase))) {
+            return true;
+        }
+
+        return false;
+    }
+    public void turnMove(){
+    
+        Move move;
+        if(getNumOfKills(playerColor)>0){
+          move = new AfterKillMove(turnBoard, playerColor);
+          
+          if(getNumOfKills(playerColor)>0){
+          return;
+          }
+          
+        }
+        
+        while (steps.size()>0) {            
+           if(chekTOout()){
+           
+           }
+        }
+        
+    }
 }
