@@ -9,6 +9,7 @@ import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
 import backgammon01.square.ColorStatus;
 import static java.lang.Math.abs;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,13 +18,12 @@ import java.util.Scanner;
  */
 public class AfterKillMove extends Move {
 
-    public AfterKillMove(board moveBoard, Handler.color thisColor) {
+    public AfterKillMove(board moveBoard, Handler.color thisColor,ArrayList<Integer> steps) {
         super(moveBoard, thisColor);
         start();
+        super.steps=steps;
         if (check()) {
-
             themove();
-            next();
         }
     }
 
@@ -47,27 +47,27 @@ public class AfterKillMove extends Move {
         boolean Bool1, Bool2;
         int numOfKill = super.moveBoard.getNum(place);
 
-        Bool1 = super.moveBoard.chekForIn(place + step1, thisColor);
-        Bool2 = super.moveBoard.chekForIn(place + step2, thisColor);
+        Bool1 = super.moveBoard.chekForIn(place + steps.get(0), thisColor);
+        Bool2 = super.moveBoard.chekForIn(place + steps.get(1), thisColor);
 
         if (Bool1 && !Bool2) {
 
-            super.moveBoard.theMove(thisColor, place, place + step1);
+            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
             super.steps.remove(0);
         } else if (!Bool1 && Bool2) {
 
-            super.moveBoard.theMove(thisColor, place, place + step2);
+            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
             super.steps.remove(1);
         } else if (numOfKill >= 2 && Bool1 && Bool2) {
 
-            super.moveBoard.theMove(thisColor, place, place + step1);
-            super.moveBoard.theMove(thisColor, place, place + step2);
+            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
             super.steps.remove(1);
             super.steps.remove(0);
             if (numOfKill > 2 && super.steps.size() > 0) {
                 for (int i = 0; i < (numOfKill - 2); i++) {
                     
-                    super.moveBoard.theMove(thisColor, place, place + step1);
+                    super.moveBoard.theMove(thisColor, place, place + steps.get(1));
                 }
             }
         }else if(numOfKill==1&&Bool1&&Bool2){

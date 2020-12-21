@@ -24,18 +24,23 @@ public class Move {
         this.moveBoard=moveBoard;
         this.thisColor=thisColor;
         moveBoard.print();
-        steps =startMove();
-        
-        
-        
-        
+        steps =startMove();  
+    }
+    public Move(board moveBoard,color thisColor,ArrayList<Integer> steps) {
+
+        this.moveBoard=moveBoard;
+        this.thisColor=thisColor;
+        this.steps=steps;
+        moveBoard.print();
+        game();
+
     }
 public Move(board moveBoard,color thisColor, int stam) {
 
         this.moveBoard=moveBoard;
         this.thisColor=thisColor;
         moveBoard.print();
-        steps =startMove();
+        steps.add(stam);
         
         game();
         
@@ -78,7 +83,7 @@ ArrayList<Integer> steps = new ArrayList<Integer>();
         Random rand = new Random();
         return rand.nextInt(6)+1;
     }
-    
+
     public void game(){
     Scanner in = new Scanner(System.in);
     int tmp,thestep;

@@ -22,16 +22,23 @@ public class Backgammon01 {
         board a=new board();
         //a.print();
         Move b;
-        
-        
-        
+        turn c;
         
         while (true) {            
-            doMove(color.whith,a);
-            doMove(color.black,a);
-            
-            
+            c=new turn(a, color.whith);
+            c=null;
+            c=new turn(a, color.black);
+            c=null;
         }
+        
+        
+        
+        /*        while (true) {
+        doMove(color.whith,a);
+        doMove(color.black,a);
+        
+        
+        }*/
     }
     public static boolean chekforkiil(color playerColor,board a){
         if(playerColor==color.whith&&a.getNum(1)>0){
@@ -41,14 +48,15 @@ public class Backgammon01 {
         }
         return false;
     }
-    public static void doMove(color playerColor, board a) {
-        Move b;
-        if (chekforkiil(playerColor,a)) {
-            b = new AfterKillMove(a, playerColor);
-        } else {
-            b = new Move(a, playerColor, 0);
-        }
-        b=null;
+    /*    public static void doMove(color playerColor, board a) {
+    Move b;
+    if (chekforkiil(playerColor,a)) {
+    b = new AfterKillMove(a, playerColor);
+    } else {
+    b = new Move(a, playerColor, 0);
     }
+    b=null;
+    }
+    }*/
 }
 
