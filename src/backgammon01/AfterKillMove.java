@@ -89,23 +89,31 @@ public class AfterKillMove extends Move {
                     super.moveBoard.theMove(thisColor, place, place + steps.get(1));
                 }
             }
-        } else if (numOfKill == 1 && Bool1 && Bool2) {
-
-            System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
-            int num;
-            num = in.nextInt();
-            while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
-                System.out.println("erorr");
-                num = in.nextInt();
-            }
-
-            super.moveBoard.theMove(thisColor, place, place + num);
-            if (abs(steps.get(0)) == num) {
+        } else if (Bool1 && Bool2) {
+            if (steps.get(0) == steps.get(1)) {
+                super.moveBoard.theMove(thisColor, place, place + steps.get(0));
                 super.steps.remove(0);
             } else {
-                super.steps.remove(1);
+                System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
+                int num;
+                num = in.nextInt();
+                while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
+                    System.out.println("erorr");
+                    num = in.nextInt();
+                }
+                if (thisColor == color.whith) {
+                    super.moveBoard.theMove(thisColor, place, place + num);
+                } else {
+                    super.moveBoard.theMove(thisColor, place, place - num);
+                }
+                 // to do for black !!!!
+                if (abs(steps.get(0)) == num) {
+                    super.steps.remove(0);
+                } else {
+                    super.steps.remove(1);
+                }
             }
-            
+
         }
 
     }
