@@ -22,16 +22,13 @@ public class Move {
     public Move(board moveBoard,color thisColor) {
 
         this.moveBoard=moveBoard;
-        this.thisColor=thisColor;
-        moveBoard.print();
-        steps =startMove();  
+        this.thisColor=thisColor; 
     }
     public Move(board moveBoard,color thisColor,ArrayList<Integer> steps) {
 
         this.moveBoard=moveBoard;
         this.thisColor=thisColor;
         this.steps=steps;
-        moveBoard.print();
         game();
 
     }
@@ -39,12 +36,9 @@ public Move(board moveBoard,color thisColor, int stam) {
 
         this.moveBoard=moveBoard;
         this.thisColor=thisColor;
-        moveBoard.print();
         steps.add(stam);
         
         game();
-        
-        
     }
 
 protected color thisColor;
@@ -54,35 +48,7 @@ protected board moveBoard;
 ArrayList<Integer> steps = new ArrayList<Integer>();    
     
 
-    public ArrayList<Integer> startMove(){
-    
-        ArrayList<Integer> tmp = new ArrayList<Integer>
-                                (Arrays.asList(dice(),dice()));
 
-        if (tmp.get(0)==tmp.get(1)) {
-            
-            tmp.addAll(Arrays.asList(tmp.get(0),tmp.get(0)));
-        }
-    
-        System.out.println(tmp.get(0)+" "+tmp.get(1));
-        
-        if(thisColor==color.black){
-        for(int i=0;i<tmp.size();i++){
-            
-            tmp.set(i,tmp.get(i)*-1);
-            
-        }
-      //  for(int i =0; i<tmp.size();i++){System.out.println(tmp.get(i));}
-    }
-        
-        return tmp;
-    }
-    
-    
-    private int dice(){
-        Random rand = new Random();
-        return rand.nextInt(6)+1;
-    }
 
     public void game(){
     Scanner in = new Scanner(System.in);
@@ -99,7 +65,36 @@ ArrayList<Integer> steps = new ArrayList<Integer>();
            moveBoard.theMove(thisColor,tmp, tmp + thestep);
        }
     }
+}
+/*    public ArrayList<Integer> startMove(){
 
+ArrayList<Integer> tmp = new ArrayList<Integer>
+(Arrays.asList(dice(),dice()));
+
+if (tmp.get(0)==tmp.get(1)) {
+
+tmp.addAll(Arrays.asList(tmp.get(0),tmp.get(0)));
+}
+
+System.out.println(tmp.get(0)+" "+tmp.get(1));
+
+if(thisColor==color.black){
+for(int i=0;i<tmp.size();i++){
+
+tmp.set(i,tmp.get(i)*-1);
+
+}
+//  for(int i =0; i<tmp.size();i++){System.out.println(tmp.get(i));}
+}
+
+return tmp;
+}
+
+
+private int dice(){
+Random rand = new Random();
+return rand.nextInt(6)+1;
+}*/
     /*    private void findPlace(){
     ColorStatus squareColor= moveBoard.change(thisColor);
     int reelstep1 = step1*-1;
@@ -140,5 +135,3 @@ ArrayList<Integer> steps = new ArrayList<Integer>();
     */
 
     
-
-}

@@ -20,8 +20,11 @@ public class turn {
     public turn(board turnBoard, Handler.color playerColor) {
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
+        turnBoard.print();
         
+        System.out.println("\n"+turnBoard.getNum(1)+"  "+turnBoard.getNum(26)+"\n");
         steps=startSteps();
+        System.out.println(steps.get(0) + " " + steps.get(1));
         turnMove();
     }
 
@@ -43,9 +46,6 @@ public class turn {
 
             tmp.addAll(Arrays.asList(tmp.get(0), tmp.get(0)));
         }
-
-        System.out.println(tmp.get(0) + " " + tmp.get(1));
-
         if (playerColor == Handler.color.black) {
             for (int i = 0; i < tmp.size(); i++) {
 
@@ -59,9 +59,11 @@ public class turn {
 
     public int getNumOfKills(color playerColor) {
 
-        int tmp = 1;
-        if (playerColor == color.black) {
-            tmp = 26;
+        int tmp;
+        if (playerColor == color.whith) {
+            tmp = 1;
+        }else{//cheking for blak
+        tmp = 26;
         }
         return turnBoard.getNum(tmp);
     }

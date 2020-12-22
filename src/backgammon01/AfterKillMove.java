@@ -18,73 +18,16 @@ import java.util.Scanner;
  */
 public class AfterKillMove extends Move {
 
-    public AfterKillMove(board moveBoard, Handler.color thisColor,ArrayList<Integer> steps) {
+    public AfterKillMove(board moveBoard, Handler.color thisColor, ArrayList<Integer> steps) {
         super(moveBoard, thisColor);
         start();
-        super.steps=steps;
+        super.steps = steps;
         if (check()) {
             themove();
         }
     }
 
     int start, place;
-
-    public void next() {
-
-        int numOfKill = super.moveBoard.getNum(place);
-        if(numOfKill>0){
-        return;
-        }
-        //to do next torn is normal
-        if(steps.size()>0){
-        super.game();
-        }
-
-    }
-
-    public void themove() {
-        Scanner in = new Scanner(System.in);
-        boolean Bool1, Bool2;
-        int numOfKill = super.moveBoard.getNum(place);
-
-        Bool1 = super.moveBoard.chekForIn(place + steps.get(0), thisColor);
-        Bool2 = super.moveBoard.chekForIn(place + steps.get(1), thisColor);
-
-        if (Bool1 && !Bool2) {
-
-            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
-            super.steps.remove(0);
-        } else if (!Bool1 && Bool2) {
-
-            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
-            super.steps.remove(1);
-        } else if (numOfKill >= 2 && Bool1 && Bool2) {
-
-            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
-            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
-            super.steps.remove(1);
-            super.steps.remove(0);
-            if (numOfKill > 2 && super.steps.size() > 0) {
-                for (int i = 0; i < (numOfKill - 2); i++) {
-                    
-                    super.moveBoard.theMove(thisColor, place, place + steps.get(1));
-                }
-            }
-        }else if(numOfKill==1&&Bool1&&Bool2){
-            
-            System.out.println(abs(steps.get(0))+" or "+abs(steps.get(1))+" ?");
-            int num;
-            num =in.nextInt();
-            while(!(num==abs(steps.get(1))||num==abs(steps.get(0)))){
-                System.out.println("erorr");
-                num =in.nextInt();
-            }
-            
-            super.moveBoard.theMove(thisColor, place, place + num);
-             super.steps.remove(0);
-        }
-
-    }
 
     public void start() {
 
@@ -117,4 +60,67 @@ public class AfterKillMove extends Move {
 
         return false;
     }
+
+    public void themove() {
+        Scanner in = new Scanner(System.in);
+        boolean Bool1, Bool2;
+        int numOfKill = super.moveBoard.getNum(place);
+
+        Bool1 = super.moveBoard.chekForIn(place + steps.get(0), thisColor);
+        Bool2 = super.moveBoard.chekForIn(place + steps.get(1), thisColor);
+
+        if (Bool1 && !Bool2) {
+
+            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+            super.steps.remove(0);
+        } else if (!Bool1 && Bool2) {
+
+            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
+            super.steps.remove(1);
+        } else if (numOfKill >= 2 && Bool1 && Bool2) {
+
+            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
+            super.steps.remove(1);
+            super.steps.remove(0);
+            if (numOfKill > 2 && super.steps.size() > 0) {
+                for (int i = 0; i < (numOfKill - 2); i++) {
+
+                    super.moveBoard.theMove(thisColor, place, place + steps.get(1));
+                }
+            }
+        } else if (numOfKill == 1 && Bool1 && Bool2) {
+
+            System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
+            int num;
+            num = in.nextInt();
+            while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
+                System.out.println("erorr");
+                num = in.nextInt();
+            }
+
+            super.moveBoard.theMove(thisColor, place, place + num);
+            if (abs(steps.get(0)) == num) {
+                super.steps.remove(0);
+            } else {
+                super.steps.remove(1);
+            }
+            
+        }
+
+    }
+
+    public void next() {
+
+        int numOfKill = super.moveBoard.getNum(place);
+        if (numOfKill > 0) {
+            return;
+        }
+        //to do next torn is normal
+        if (steps.size() > 0) {
+            super.game();
+        }
+
+    }
+
 }
