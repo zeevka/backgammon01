@@ -27,7 +27,7 @@ public class board {
     
 
     /**
-     * 
+     * this function do the move
      * @param thisColor - the color of the player
      * @param out - the number of the square thet is taken out of it 
      * @param in - the number of the square thet is put of it
@@ -65,7 +65,12 @@ public class board {
     
     
     
-    
+    /**
+     * this function chek if there is s=piece to take out
+     * @param space get the number of square to chek if thre is there a piece
+     * @param pliercolor get the color of the player
+     * @return true if there is piece there or fals if there isn't
+     */
    public boolean chekForOut(int space, color pliercolor) {
          ColorStatus tmpColor = theBoard[space].getStatus();
          int num=theBoard[space].getAmountOfPieces();
@@ -77,6 +82,12 @@ public class board {
         return false;
     }
 
+   /**
+     * this function chek if there is option to put in a piece
+     * @param space get the number of square to chek if thre is option to put in a piece
+     * @param pliercolor get the color of the player
+     * @return true if there is a option or fals if there isn't
+    */
     public boolean chekForIn(int space, color Pliercolor) {
 
         ColorStatus tmpColor = theBoard[space].getStatus();
@@ -99,10 +110,12 @@ public class board {
      * this function is for start the bord inn the beginin of the game
      *
      * @return bord thet start
-     *
-     *
-     *
-     *
+     * 
+     * after this function the board wil look like thet:
+     * ******************-******************
+     *  2  0  0  0  0 -5   0 -3  0  0  0  5*
+     * -2  0  0  0  0  5   0  3  0  0  0 -5* 
+     * ******************-******************
      */
     private square[] startBord() {
 
@@ -112,6 +125,9 @@ public class board {
 
             switch (i) {
                 case 0:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
                 case 1:
                     board[i] = new square(0, square.ColorStatus.White);
                     board[N - i-1] = new square(0, square.ColorStatus.Black);
@@ -147,6 +163,79 @@ public class board {
 
     }
     
+/**
+ * this function is only for me!!!!!!!!!!!!!!!!
+ * to chek the code !
+ * 
+ * @return 
+ */
+        private square[] newBord() {
+
+        square[] board;
+        board = new square[N];
+        for (int i = 0; i < N / 2; i++) {
+
+            switch (i) {
+                case 0:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 1:
+                    board[i] = new square(0, square.ColorStatus.White);
+                    board[N - i-1] = new square(0, square.ColorStatus.Black);
+                    break;
+                case 2:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 3:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 4:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 5:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 6:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+
+                case 7:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 9:
+                    board[i] = new square(0, square.ColorStatus.Black);
+                    board[N - i-1] = new square(0, square.ColorStatus.White);
+                    break;
+                case 13:
+                    board[i] = new square(0, square.ColorStatus.White);
+                    board[N - i-1] = new square(0, square.ColorStatus.Black);
+                    break;
+
+                default:
+                    board[i] = new square(0, square.ColorStatus.empty);
+                    board[N - i-1] = new square(0, square.ColorStatus.empty);
+
+            }
+
+        }
+        
+        return board;
+        
+
+    }
+    
+    /**
+     * this function is to get the color of the pleyer and return this color in square
+     * @param a get the color of player
+     * @return  color of square
+     */
     public ColorStatus change(color a){
     
         if(a==color.whith){
@@ -161,7 +250,10 @@ public class board {
     
     
     
-    // tmperry ontil grafic
+    
+    /**
+     * this is tmperry function to print the board
+     */
     public void print() {
         int tmp;
         int tmp2 = 2;
@@ -191,6 +283,12 @@ public class board {
             System.out.println("");
 
     }
+    /**
+     * this function is to get a number of square and returnn the amount of pieces 
+     * to rhere is in this square 
+     * @param square the number of square 
+     * @return the amount of pieces
+     */
     public int getNum(int square){
     
         return theBoard[square].getAmountOfPieces();

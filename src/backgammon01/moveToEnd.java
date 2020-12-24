@@ -6,6 +6,7 @@
 package backgammon01;
 
 import backgammon01.Server.Handler;
+import java.util.Scanner;
 
 /**
  *
@@ -18,12 +19,21 @@ public class moveToEnd extends Move {
         start();
     }
     private int plase;
+    private int plaseForFunk;
+    private int index;
+    
+    
 
     public final void start() {
         if (thisColor == Handler.color.whith) {
             plase = 27;
+            plaseForFunk=20;
+            index=1;
         } else {
             plase = 0;
+            plaseForFunk=7;
+            index=-1;
+                    
         }
     }
 
@@ -50,4 +60,56 @@ public class moveToEnd extends Move {
         return false;
     }
 
+    public boolean aoto(){
+    int tmp,numof=0;
+        for(tmp =plaseForFunk; tmp !=plase+steps.get(0);tmp+=index){
+        
+            if(moveBoard.getStatus(tmp)==moveBoard.change(thisColor)){// todo chek if after ove the square is empty
+                return false;
+            }
+        }
+                    
+        for(;tmp !=plase;tmp+=index){
+            if(moveBoard.getStatus(tmp)==moveBoard.change(thisColor)){
+            numof=moveBoard.getNum(tmp);
+            }
+            while (steps.size()>0&&numof>0) {
+                moveBoard.theMove(thisColor, tmp, plase);
+                steps.remove(0);
+                numof-=1;
+            }
+            if(steps.size()==0){
+                System.out.println("we heve a winer !! ");
+                System.exit(0);
+            }
+        }
+        return true;
+    
+    }
+    public void mteMove(){
+    int tmp;
+        Scanner s = new Scanner(System.in);
+        if(steps.size()>1&&steps.get(0)<steps.get(1)){
+           tmp = steps.get(0);
+           steps.set(0,steps.get(1));
+           steps.set(1, tmp);
+        }
+        
+        while(steps.size()>0){
+        
+            if(!aoto()){
+                continue;
+            }
+            tmp=0;
+            while(true){
+            tmp=s.nextInt();
+            if(moveBoard.chekForOut(tmp, thisColor)&&(tmp+steps.get(0)>=1&&tmp+steps.get(0)<=26)){
+            break;
+            }
+                System.out.println("erorr");
+            }
+           // moveBoard.theMove(thisColor, , plase)
+        }
+        
+    }
 }
