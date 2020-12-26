@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
+ * for evrt torn i open new object
  *
  * @author zeev7
  */
@@ -21,7 +22,7 @@ public class turn {
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
-        
+
         System.out.println("\n"+turnBoard.getNum(1)+"  "+turnBoard.getNum(26)+"\n");
         steps=startSteps();
         System.out.println(steps.get(0) + " " + steps.get(1));
@@ -33,11 +34,21 @@ public class turn {
     private int numOfKills;
     ArrayList<Integer> steps = new ArrayList<Integer>();
 
+
+    /**
+     * this is function thet give the steps,
+     * @return number btwine 1-6
+     */
     private int dice() {
         Random rand = new Random();
         return rand.nextInt(6) + 1;
     }
 
+    /**
+     *art the steps with random numbers,
+     * if has double thet need for steps 
+     * @return list with the numbers
+     */
     public ArrayList<Integer> startSteps() {
 
         ArrayList<Integer> tmp = new ArrayList<Integer>(Arrays.asList(dice(), dice()));
@@ -57,6 +68,11 @@ public class turn {
         return tmp;
     }
 
+    /**
+     * this functin give the number of kill pieces
+     * @param playerColor
+     * @return the number of kill pieces
+     */
     public int getNumOfKills(color playerColor) {
 
         int tmp;
@@ -68,6 +84,11 @@ public class turn {
         return turnBoard.getNum(tmp);
     }
 
+    /**
+     * this function chek if thre is option to take out pieces
+     * @return the number of pieces thet is not 
+     * 
+     */
     public int chekTOout() {
 
         int sum = 0, num, plase, i;
@@ -89,26 +110,33 @@ public class turn {
         /*        if (sum == (15-turnBoard.getNum(plase))) {
          return true;
          }
-        
+
          return false;*/
     }
 
+    /**
+     * this function do the moves
+     */
+    
     public void turnMove() {
 
         Move move;
+        //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
             move = new AfterKillMove(turnBoard, playerColor,steps);
-
+            // if still hve a kill pieces thet - 
             if (getNumOfKills(playerColor) > 0) {
                 return;
             }
 
         }
+        // if there is to meny pieces out of the aria
         if (chekTOout() > steps.size()) {
             move = new Move(turnBoard, playerColor,steps);
         } else {
 
             while (steps.size() > 0) {
+                // chek evry step if cen move to end
                 if (chekTOout()==0) {
                     move = new moveToEnd(turnBoard, playerColor);
                 }else{

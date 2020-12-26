@@ -66,16 +66,16 @@ public class board {
     
     
     /**
-     * this function chek if there is s=piece to take out
+     * this function chek if there is piece to take out
      * @param space get the number of square to chek if thre is there a piece
      * @param pliercolor get the color of the player
      * @return true if there is piece there or fals if there isn't
      */
    public boolean chekForOut(int space, color pliercolor) {
+       
          ColorStatus tmpColor = theBoard[space].getStatus();
          int num=theBoard[space].getAmountOfPieces();
          
-
          if(change(pliercolor)==tmpColor&&num>0){
             return true;
          }
@@ -293,6 +293,13 @@ public class board {
     
         return theBoard[square].getAmountOfPieces();
     }
+    
+    /**
+     * this function is to get a number of square and returnn the color-status 
+     * of this sqare
+     * @param square
+     * @return 
+     */
     public ColorStatus  getStatus(int square){
     
     return theBoard[square].getStatus();

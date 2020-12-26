@@ -38,11 +38,18 @@ public class square {
         this.status = status;
     }
     
+    
+    /**
+     * set the amountOfPieces plus one 
+     */
     public void setAopPlusOne(){
 
          this.amountOfPieces++;
     }
     
+    /**
+     * set the amountOfPieces minus one 
+     */
     public void setAopMinusOne(){
 
          this.amountOfPieces--;

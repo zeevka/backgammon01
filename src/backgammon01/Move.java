@@ -19,11 +19,23 @@ import java.util.Scanner;
  */
 public class Move {
 
+    /**
+     * this is constractor for the successors
+     * @param moveBoard get the board
+     * @param thisColor 
+     */
     public Move(board moveBoard,color thisColor) {
 
         this.moveBoard=moveBoard;
         this.thisColor=thisColor; 
     }
+    
+    /**
+     *  this is constractor for normal move for all the steps
+     * @param moveBoard get the board
+     * @param thisColor get the player color
+     * @param steps get the result from the dice
+     */
     public Move(board moveBoard,color thisColor,ArrayList<Integer> steps) {
 
         this.moveBoard=moveBoard;
@@ -32,10 +44,18 @@ public class Move {
         game();
 
     }
+    
+    /**
+     * this is constractor for normal move for one step wiche
+     * @param moveBoard get the board
+     * @param thisColor get the player color
+     * @param stam yhe step to do
+     */
 public Move(board moveBoard,color thisColor, int stam) {
 
         this.moveBoard=moveBoard;
         this.thisColor=thisColor;
+        this. steps = new ArrayList<>();
         steps.add(stam);
         
         game();
@@ -49,7 +69,9 @@ ArrayList<Integer> steps = new ArrayList<Integer>();
     
 
 
-
+/**
+ * this is a function for normal move to do the move 
+ */
     public void game(){
     Scanner in = new Scanner(System.in);
     int tmp,thestep;
