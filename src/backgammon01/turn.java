@@ -23,8 +23,8 @@ public class turn {
         this.playerColor = playerColor;
         turnBoard.print();
 
-        System.out.println("\n"+turnBoard.getNum(1)+"  "+turnBoard.getNum(26)+"\n");
-        steps=startSteps();
+     //   System.out.println("\n" + turnBoard.getNum(1) + "  " + turnBoard.getNum(26) + "\n");
+        steps = startSteps();
         System.out.println(steps.get(0) + " " + steps.get(1));
         turnMove();
     }
@@ -34,9 +34,9 @@ public class turn {
     private int numOfKills;
     ArrayList<Integer> steps = new ArrayList<Integer>();
 
-
     /**
      * this is function thet give the steps,
+     *
      * @return number btwine 1-6
      */
     private int dice() {
@@ -45,8 +45,8 @@ public class turn {
     }
 
     /**
-     *art the steps with random numbers,
-     * if has double thet need for steps 
+     * art the steps with random numbers, if has double thet need for steps
+     *
      * @return list with the numbers
      */
     public ArrayList<Integer> startSteps() {
@@ -70,6 +70,7 @@ public class turn {
 
     /**
      * this functin give the number of kill pieces
+     *
      * @param playerColor
      * @return the number of kill pieces
      */
@@ -78,16 +79,17 @@ public class turn {
         int tmp;
         if (playerColor == color.whith) {
             tmp = 1;
-        }else{//cheking for blak
-        tmp = 26;
+        } else {//cheking for blak
+            tmp = 26;
         }
         return turnBoard.getNum(tmp);
     }
 
     /**
      * this function chek if thre is option to take out pieces
-     * @return the number of pieces thet is not 
-     * 
+     *
+     * @return the number of pieces thet is not
+     *
      */
     public int chekTOout() {
 
@@ -101,12 +103,14 @@ public class turn {
             plase = 0;
         }
 
-        for (i = 0; i > 6; i++) {
+
+        
+        for (i = 0; i < 6; i++) {
             if (turnBoard.getStatus(num + i) == turnBoard.change(playerColor)) {
                 sum += turnBoard.getNum(num + i);
             }
         }
-        return (15 - turnBoard.getNum(plase)-sum);
+        return (15 - turnBoard.getNum(plase) - sum);
         /*        if (sum == (15-turnBoard.getNum(plase))) {
          return true;
          }
@@ -117,13 +121,12 @@ public class turn {
     /**
      * this function do the moves
      */
-    
     public void turnMove() {
 
         Move move;
         //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
-            move = new AfterKillMove(turnBoard, playerColor,steps);
+            move = new AfterKillMove(turnBoard, playerColor, steps);
             // if still hve a kill pieces thet - 
             if (getNumOfKills(playerColor) > 0) {
                 return;
@@ -132,16 +135,17 @@ public class turn {
         }
         // if there is to meny pieces out of the aria
         if (chekTOout() > steps.size()) {
-            move = new Move(turnBoard, playerColor,steps);
+            move = new Move(turnBoard, playerColor, steps);
         } else {
 
             while (steps.size() > 0) {
                 // chek evry step if cen move to end
-                if (chekTOout()==0) {
-                    move = new moveToEnd(turnBoard, playerColor);
-                }else{
-                  move = new Move(turnBoard, playerColor,steps.get(0));
-                  steps.remove(0);
+                if (chekTOout() == 0) {
+                    move = new moveToEnd(turnBoard, playerColor,steps);
+                    break;
+                } else {
+                    move = new Move(turnBoard, playerColor, steps.get(0));
+                    steps.remove(0);
                 }
             }
         }

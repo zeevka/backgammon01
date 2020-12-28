@@ -17,10 +17,9 @@ public class square {
         this.amountOfPieces = amountOfPieces;
         this.status = status;
     }
-    
-   
-   private int amountOfPieces;
-   private ColorStatus status;
+
+    private int amountOfPieces;
+    private ColorStatus status;
 
     public int getAmountOfPieces() {
         return amountOfPieces;
@@ -37,40 +36,32 @@ public class square {
     public void setStatus(ColorStatus status) {
         this.status = status;
     }
-    
-    
+
     /**
-     * set the amountOfPieces plus one 
+     * set the amountOfPieces plus one
      */
-    public void setAopPlusOne(){
+    public void setAopPlusOne() {
 
-         this.amountOfPieces++;
+        this.amountOfPieces++;
     }
-    
+
     /**
-     * set the amountOfPieces minus one 
+     * set the amountOfPieces minus one
      */
-    public void setAopMinusOne(){
+    public void setAopMinusOne() {
 
-         this.amountOfPieces--;
-         if(amountOfPieces==0){
-             status=ColorStatus.empty;
-         }
+        this.amountOfPieces--;
+        if (amountOfPieces == 0) {
+            status = ColorStatus.empty;
+        }
     }
-   
 
-           
-    
-           
-           
-   public enum ColorStatus{
-   
-       empty,
-       Black,
-       White
-       
-    
-   }
-    
+    public enum ColorStatus {
+
+        empty,
+        Black,
+        White
+
+    }
+
 }
-

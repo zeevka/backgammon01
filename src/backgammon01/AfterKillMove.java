@@ -28,8 +28,7 @@ public class AfterKillMove extends Move {
     }
 
     /**
-     * plase - the end of the board
-     * start - for the function thet chek to out
+     * plase - the end of the board start - for the function thet chek to out
      */
     int start, place;
 
@@ -49,10 +48,10 @@ public class AfterKillMove extends Move {
         }
     }
 
-
     /**
-     * this function chek if there is eny option to put in a kill piece 
-     * @return 
+     * this function chek if there is eny option to put in a kill piece
+     *
+     * @return
      */
     public boolean check() {
         ColorStatus squareColor, anmyColor;
@@ -74,7 +73,7 @@ public class AfterKillMove extends Move {
     }
 
     /**
-     * this function do the actually move 
+     * this function do the actually move
      */
     public void themove() {
         Scanner in = new Scanner(System.in);
@@ -122,7 +121,7 @@ public class AfterKillMove extends Move {
                 } else {
                     super.moveBoard.theMove(thisColor, place, place - num);
                 }
-                 // to do for black !!!!
+                // to do for black !!!!
                 if (abs(steps.get(0)) == num) {
                     super.steps.remove(0);
                 } else {
@@ -135,17 +134,16 @@ public class AfterKillMove extends Move {
     }
 
 
-        /*    public void next() {
+    /*    public void next() {
         
-        int numOfKill = super.moveBoard.getNum(place);
-        if (numOfKill > 0) {
-        return;
-        }
-        //to do next torn is normal
-        if (steps.size() > 0) {
-        super.game();
-        }
+     int numOfKill = super.moveBoard.getNum(place);
+     if (numOfKill > 0) {
+     return;
+     }
+     //to do next torn is normal
+     if (steps.size() > 0) {
+     super.game();
+     }
         
-        }*/
-
+     }*/
 }

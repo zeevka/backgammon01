@@ -21,44 +21,18 @@ public class Backgammon01 {
 
         // to do server !
         // to do qa to move to end
-        board a=new board();
-        //a.print();
+        
+        board a = new board();
         Move b;
         turn c;
         
-        while (true) {            
-            c=new turn(a, color.whith);
-            c=null;
-            c=new turn(a, color.black);
-            c=null;
+        while (true) {
+        c = new turn(a, color.whith);
+        c = null;
+        c = new turn(a, color.black);
+        c = null;
         }
-        
-        
-        
-        /*        while (true) {
-        doMove(color.whith,a);
-        doMove(color.black,a);
-        
-        
-        }*/
-    }
-    /*    public static boolean chekforkiil(color playerColor,board a){
-    if(playerColor==color.whith&&a.getNum(1)>0){
-    return true;
-    }else if(playerColor==color.black&&a.getNum(26)>0){
-    return true;
-    }
-    return false;
-    }*/
-    /*    public static void doMove(color playerColor, board a) {
-    Move b;
-    if (chekforkiil(playerColor,a)) {
-    b = new AfterKillMove(a, playerColor);
-    } else {
-    b = new Move(a, playerColor, 0);
-    }
-    b=null;
-    }
-    }*/
-}
 
+    }
+
+}
