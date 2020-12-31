@@ -6,31 +6,45 @@
 package backgammon01.Server;
 
 import backgammon01.board;
+import backgammon01.turn;
+import java.net.Socket;
 
 /**
  *
  * @author zeev7
  */
-public class Handler {
+public class Handler extends Thread{
 
-    public Handler(board GameBoard) {
-        this.GameBoard = GameBoard;
+    public Handler(Socket player1, Socket player2) {
+        this.GameBoard = new board();
+        this.player1=player1;
+        this.player2=player2;
     }
     
-    board GameBoard;
+   private board GameBoard;
+    private Socket player1, player2;
+    private turn c;
+
+
+    @Override
+    public void run() {
+        while (true) {   
+        c = new turn(GameBoard, color.whith);
+        c = null;
+        c = new turn(GameBoard, color.black);
+        c = null;
+        }
+    }
+    
+    
+    
+    
    public enum color{
     
         whith,
         black;
     
     }
-   private boolean theGame(){
-   int i;
-       while (true) {           
 
-       }
-       
-   
-   }
    
 }
