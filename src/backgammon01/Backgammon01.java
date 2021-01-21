@@ -7,6 +7,8 @@ package backgammon01;
 
 import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
+import backgammon01.sql.sqlMain;
+import java.sql.SQLException;
 
 /**
  *
@@ -17,12 +19,12 @@ public class Backgammon01 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
         // to do server !
-        // to do qa to move to end
+        // to do if isn't have any plase to move
         
-        board a = new board();
+        /*        board a = new board();
         Move b;
         turn c;
         
@@ -31,8 +33,9 @@ public class Backgammon01 {
         c = null;
         c = new turn(a, color.black);
         c = null;
-        }
-
+        }*/
+        
+        sqlMain a = new sqlMain();
     }
 
 }

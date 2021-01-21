@@ -38,11 +38,12 @@ public class board {
         ColorStatus tmpColor = theBoard[in].getStatus();//the color of the square
         ColorStatus playerColor = change(thisColor);// the color of the flyer in colorStatus
 
+        
         if (tmpColor == ColorStatus.empty) {//if the square is empty 
 
             theBoard[in].setStatus(playerColor);
             theBoard[in].setAmountOfPieces(1);
-        } else if (tmpColor == playerColor) {
+        } else if (tmpColor == playerColor) {//need only to add 
             theBoard[in].setAopPlusOne();
         } else {//thre is only one thet belongs to the opponent
 

@@ -35,10 +35,7 @@ public class Handler extends Thread{
         c = null;
         }
     }
-    
-    
-    
-    
+
    public enum color{
     
         whith,

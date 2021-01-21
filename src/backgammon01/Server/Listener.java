@@ -18,14 +18,12 @@ import java.net.Socket;
 public class Listener extends Thread{
     
 private  Socket client;
-private PrintWriter out;
 private BufferedReader input;
 private String str;
 
     public Listener(Socket client) throws IOException {
         this.client = client;
         input= new BufferedReader(new InputStreamReader(client.getInputStream()));
-        out= new PrintWriter(client.getOutputStream());
     }
    
         @Override
@@ -34,7 +32,7 @@ private String str;
             try {
                 str= input.readLine();
             } catch (IOException ex) {
-                System.err.println("we have a ");
+                System.err.println("we have a problem");
             }
             System.out.println("client: "+str );
             str="";

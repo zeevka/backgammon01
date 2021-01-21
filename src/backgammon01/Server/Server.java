@@ -20,6 +20,8 @@ public class Server {
     
     private ServerSocket ss;
     private Socket Socket1, Socket2;
+    private int token1, token2;
+    private Handler ServerHandler;
 
     public void start(){
     
@@ -39,6 +41,9 @@ public class Server {
                 System.err.println("Accept failed.");
                 System.exit(1);
             }
+            
+    //    string a = Socket1
+            
             try {
                 Socket2 = ss.accept();
                 System.out.println("client 1 connected");
@@ -46,6 +51,8 @@ public class Server {
                 System.err.println("Accept failed.");
                 System.exit(1);
             }
+            
+            ServerHandler= new Handler(Socket1, Socket2);
             
             
         }
