@@ -38,4 +38,10 @@ private String str;
             str="";
         }
     }    
+    
+    public String giv (int a) throws IOException{
+    
+        return input.readLine();
+    
+    }
 }

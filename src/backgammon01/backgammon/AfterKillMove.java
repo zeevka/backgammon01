@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backgammon01;
+package backgammon01.backgammon;
 
 import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
-import backgammon01.square.ColorStatus;
+import backgammon01.backgammon.square.ColorStatus;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Scanner;

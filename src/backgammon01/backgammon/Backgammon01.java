@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backgammon01;
+package backgammon01.backgammon;
 
-import backgammon01.Server.Handler;
+import backgammon01.Server.Server;
 import backgammon01.Server.Handler.color;
 import backgammon01.sql.sqlMain;
 import java.sql.SQLException;
@@ -35,7 +35,9 @@ public class Backgammon01 {
         c = null;
         }*/
         
-        sqlMain a = new sqlMain();
+      //  sqlMain a = new sqlMain();
+        Server a = new Server();
+        
     }
 
 }

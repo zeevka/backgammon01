@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backgammon01;
+package backgammon01.backgammon;
 
 import java.util.ArrayList;
 

@@ -5,7 +5,7 @@
  */
 package backgammon01.Server;
 
-import backgammon01.board;
+import backgammon01.backgammon.board;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -28,7 +28,7 @@ public class Server {
         try {
             ss = new ServerSocket(4447);
         } catch (IOException e) {
-            System.err.println("Could not listen on port: 4444.");
+            System.err.println("Could not listen on port: 4447.");
             System.exit(1);
         }
 
@@ -53,8 +53,7 @@ public class Server {
             }
             
             ServerHandler= new Handler(Socket1, Socket2);
-            
-            
+            ServerHandler.start();
         }
     }
 }

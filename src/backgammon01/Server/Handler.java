@@ -5,8 +5,8 @@
  */
 package backgammon01.Server;
 
-import backgammon01.board;
-import backgammon01.turn;
+import backgammon01.backgammon.board;
+import backgammon01.backgammon.turn;
 import java.net.Socket;
 
 /**
@@ -23,6 +23,7 @@ public class Handler extends Thread{
     
    private board GameBoard;
     private Socket player1, player2;
+    private Listener lis1, lis2;
     private turn c;
 
 

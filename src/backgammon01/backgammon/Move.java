@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backgammon01;
+package backgammon01.backgammon;
 
 import backgammon01.Server.Handler.color;
-import backgammon01.square.ColorStatus;
+import backgammon01.backgammon.square.ColorStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;

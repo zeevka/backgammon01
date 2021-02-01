@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backgammon01;
+package backgammon01.backgammon;
 
 import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
+import backgammon01.Server.hendler_turn;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -18,21 +19,28 @@ import java.util.Random;
  */
 public class turn {
 
-    public turn(board turnBoard, Handler.color playerColor) {
+    public turn(board turnBoard, Handler.color playerColor,hendler_turn a) {
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
+        this.a=a;
 
      //   System.out.println("\n" + turnBoard.getNum(1) + "  " + turnBoard.getNum(26) + "\n");
         steps = startSteps();
-        System.out.println(steps.get(0) + " " + steps.get(1));
+        a.send(steps.get(0) + " " + steps.get(1));
+       // System.out.println(steps.get(0) + " " + steps.get(1));
         turnMove();
     }
 
     private board turnBoard;
     private Handler.color playerColor;
     private int numOfKills;
+    private hendler_turn a;
     ArrayList<Integer> steps = new ArrayList<Integer>();
+
+    public turn(board GameBoard, color color) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     /**
      * this is function thet give the steps,
