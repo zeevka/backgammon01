@@ -7,7 +7,10 @@ package backgammon01.Server;
 
 import backgammon01.backgammon.board;
 import backgammon01.backgammon.turn;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +22,15 @@ public class Handler extends Thread{
         this.GameBoard = new board();
         this.player1=player1;
         this.player2=player2;
+        
+        try {
+            lis1=new Listener(player1);
+            lis2=new Listener(player2);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
    private board GameBoard;
@@ -29,10 +41,12 @@ public class Handler extends Thread{
 
     @Override
     public void run() {
-        while (true) {   
-        c = new turn(GameBoard, color.whith);
+        lis1.start();
+        lis2.start();
+        while (true) {
+        c = new turn(GameBoard, color.whith,lis1);
         c = null;
-        c = new turn(GameBoard, color.black);
+        c = new turn(GameBoard, color.black,lis2);
         c = null;
         }
     }

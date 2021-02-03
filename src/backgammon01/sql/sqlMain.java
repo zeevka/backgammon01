@@ -20,10 +20,36 @@ import java.util.logging.Logger;
  */
 public class sqlMain {
 
+    
     public String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Backgammon;integratedSecurity=true";
     public ResultSet rs;
+    
+    public  ResultSet whithResultSet(String sqlStatement,String[] PreparedStatement){
+        try{
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection conn = DriverManager.getConnection(DB_URL);
+        PreparedStatement ps = conn.prepareStatement(sqlStatement);
+        ps.setEscapeProcessing(true);
+       
+        for(int i =0; i< PreparedStatement.length;i++){
+         ps.setString(i,PreparedStatement[i]);
+        }
+        
+        return ps.executeQuery();
+        }catch(Exception e){
+        return null;
+        }
+    } 
+    
+    
 
-    public sqlMain(String a) throws SQLException {
+
+}
+/**
+ 
+     public sqlMain(String a) throws SQLException {
+        
+
         String SPsql = "EXEC new_player ?,?";   // for stored proc taking 2 parameters
         //  Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         Connection conn = DriverManager.getConnection(DB_URL);
@@ -59,7 +85,7 @@ public class sqlMain {
        }
        
         
-        /*            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+              Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         Connection conn = DriverManager.getConnection(DB_URL);
         Statement statement;
         String query = "EXEC a1";
@@ -73,7 +99,7 @@ public class sqlMain {
         // close the resorces
         rs.close();
         
-        conn.close();*/
+        conn.close();
 }
     
 
@@ -129,5 +155,5 @@ public class sqlMain {
         ResultSet rs = ps.executeQuery();
         // return null;
     }
-
-}
+ 
+ */

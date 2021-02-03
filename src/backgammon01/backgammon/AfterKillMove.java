@@ -7,6 +7,7 @@ package backgammon01.backgammon;
 
 import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
+import backgammon01.Server.Listener;
 import backgammon01.backgammon.square.ColorStatus;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.Scanner;
  */
 public class AfterKillMove extends Move {
 
-    public AfterKillMove(board moveBoard, Handler.color thisColor, ArrayList<Integer> steps) {
-        super(moveBoard, thisColor);
+    public AfterKillMove(board moveBoard, Handler.color thisColor, ArrayList<Integer> steps, Listener lis) {
+        super(moveBoard, thisColor,lis);
         start();
         super.steps = steps;
         if (check()) {
@@ -111,10 +112,12 @@ public class AfterKillMove extends Move {
             } else {
                 System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
                 int num;
-                num = in.nextInt();
+               // num = in.nextInt();
+                num = lis.giv(0);
                 while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
                     System.out.println("erorr");
-                    num = in.nextInt();
+                  //  num = in.nextInt();
+                    num=lis.giv(0);
                 }
                 if (thisColor == color.whith) {
                     super.moveBoard.theMove(thisColor, place, place + num);

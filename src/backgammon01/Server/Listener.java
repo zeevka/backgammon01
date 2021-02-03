@@ -10,38 +10,66 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author zeev7
  */
-public class Listener extends Thread{
-    
-private  Socket client;
-private BufferedReader input;
-private String str;
+public class Listener extends Thread {
 
     public Listener(Socket client) throws IOException {
         this.client = client;
-        input= new BufferedReader(new InputStreamReader(client.getInputStream()));
+        input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        mes = new ArrayList<String>();
+        
+        
     }
-   
-        @Override
+    
+    private Socket client;
+    private BufferedReader input;
+    private String str;
+    private ArrayList<String> mes;
+
+
+    @Override
     public void run() {
-        while(true){
-            try {
-                str= input.readLine();
-            } catch (IOException ex) {
-                System.err.println("we have a problem");
-            }
-            System.out.println("client: "+str );
-            str="";
+        PrintWriter pr;
+        try {
+            pr = new PrintWriter(client.getOutputStream());
+            pr.println("hey from server");
+            pr.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
-    
-    public String giv (int a) throws IOException{
-    
-        return input.readLine();
-    
+
+        while (true) {
+        try {
+        str = input.readLine();
+        mes.add(str);
+        System.out.println("client: " + str);
+        str = "";        
+        } catch (IOException ex) {
+        System.err.println("we have a problem");
+        }
+
+        }
+    }
+
+    public int giv(int a) {
+
+       // mes.remove(mes.size()-1);
+        while(mes.size()==0){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        mes.remove(mes.size()-1);
+        return Integer.parseInt(str) ;
+
     }
 }

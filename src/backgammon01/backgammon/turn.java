@@ -8,6 +8,7 @@ package backgammon01.backgammon;
 import backgammon01.Server.Handler;
 import backgammon01.Server.Handler.color;
 import backgammon01.Server.hendler_turn;
+import backgammon01.Server.Listener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -19,7 +20,8 @@ import java.util.Random;
  */
 public class turn {
 
-    public turn(board turnBoard, Handler.color playerColor,hendler_turn a) {
+    public turn(board turnBoard, Handler.color playerColor,Listener lis) {
+        this.lis =lis;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
@@ -27,20 +29,22 @@ public class turn {
 
      //   System.out.println("\n" + turnBoard.getNum(1) + "  " + turnBoard.getNum(26) + "\n");
         steps = startSteps();
-        a.send(steps.get(0) + " " + steps.get(1));
-       // System.out.println(steps.get(0) + " " + steps.get(1));
+       // a.send(steps.get(0) + " " + steps.get(1));
+       System.out.println(steps.get(0) + " " + steps.get(1));
         turnMove();
     }
 
+    
+    /*    public turn(board GameBoard, color color) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }*/
+    private Listener lis;
     private board turnBoard;
     private Handler.color playerColor;
     private int numOfKills;
     private hendler_turn a;
     ArrayList<Integer> steps = new ArrayList<Integer>();
 
-    public turn(board GameBoard, color color) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     /**
      * this is function thet give the steps,
@@ -134,7 +138,7 @@ public class turn {
         Move move;
         //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
-            move = new AfterKillMove(turnBoard, playerColor, steps);
+            move = new AfterKillMove(turnBoard, playerColor, steps,lis);
             // if still hve a kill pieces thet - 
             if (getNumOfKills(playerColor) > 0) {
                 return;
@@ -143,16 +147,16 @@ public class turn {
         }
         // if there is to meny pieces out of the aria
         if (chekTOout() > steps.size()) {
-            move = new Move(turnBoard, playerColor, steps);
+            move = new Move(turnBoard, playerColor, steps,lis);
         } else {
 
             while (steps.size() > 0) {
                 // chek evry step if cen move to end
                 if (chekTOout() == 0) {
-                    move = new moveToEnd(turnBoard, playerColor,steps);
+                    move = new moveToEnd(turnBoard, playerColor,steps,lis);
                     break;
                 } else {
-                    move = new Move(turnBoard, playerColor, steps.get(0));
+                    move = new Move(turnBoard, playerColor, steps.get(0),lis);
                     steps.remove(0);
                 }
             }

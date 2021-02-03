@@ -6,6 +6,7 @@
 package backgammon01.backgammon;
 
 import backgammon01.Server.Handler;
+import backgammon01.Server.Listener;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -16,8 +17,8 @@ import java.util.Scanner;
  */
 public class moveToEnd extends Move {
 
-    public moveToEnd(board moveBoard, Handler.color thisColor,ArrayList<Integer> steps) {
-        super(moveBoard, thisColor);
+    public moveToEnd(board moveBoard, Handler.color thisColor,ArrayList<Integer> steps,Listener lis) {
+        super(moveBoard, thisColor,lis);
         super.steps=steps;
         start();
         mteMove();
@@ -92,7 +93,8 @@ public class moveToEnd extends Move {
             }
             tmp = 0;
             while (true) {
-                tmp = s.nextInt();
+                tmp =lis.giv(0);
+// tmp = s.nextInt();
                 //first check if in square tmp there is piece   next- chek if there is optien to do it
                 if (moveBoard.chekForOut(tmp, thisColor) && (tmp + steps.get(0) >= 1 && tmp + steps.get(0) <= 26)) {
                     if (tmp + steps.get(0)+index == plase) {

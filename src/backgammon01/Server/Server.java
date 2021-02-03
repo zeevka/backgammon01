@@ -16,6 +16,10 @@ import java.net.Socket;
  */
 public class Server {
 
+    public Server() {
+        start();
+    }
+
     
     
     private ServerSocket ss;
