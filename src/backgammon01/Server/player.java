@@ -32,7 +32,8 @@ public class player {
         inGame,
         wait,
         no,
-        yes
+        yes,
+        no2
     }
 
     public Socket getNet() {

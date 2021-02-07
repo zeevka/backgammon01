@@ -33,6 +33,7 @@ public class Handler extends Thread{
         
     }
     
+    private int a;
    private board GameBoard;
     private Socket player1, player2;
     private Listener lis1, lis2;
@@ -52,10 +53,64 @@ public class Handler extends Thread{
     }
 
    public enum color{
-    
         whith,
         black;
-    
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+
+    public board getGameBoard() {
+        return GameBoard;
+    }
+
+    public void setGameBoard(board GameBoard) {
+        this.GameBoard = GameBoard;
+    }
+
+    public Socket getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(Socket player1) {
+        this.player1 = player1;
+    }
+
+    public Socket getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(Socket player2) {
+        this.player2 = player2;
+    }
+
+    public Listener getLis1() {
+        return lis1;
+    }
+
+    public void setLis1(Listener lis1) {
+        this.lis1 = lis1;
+    }
+
+    public Listener getLis2() {
+        return lis2;
+    }
+
+    public void setLis2(Listener lis2) {
+        this.lis2 = lis2;
+    }
+
+    public turn getC() {
+        return c;
+    }
+
+    public void setC(turn c) {
+        this.c = c;
     }
 
    

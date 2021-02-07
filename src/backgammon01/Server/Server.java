@@ -26,6 +26,8 @@ public class Server {
     private Socket Socket1, Socket2;
     private int token1, token2;
     private Handler ServerHandler;
+    private player p;
+    private validation v;
 
     public void start(){
     
@@ -35,29 +37,40 @@ public class Server {
             System.err.println("Could not listen on port: 4447.");
             System.exit(1);
         }
-
-
-        while (true) {
-            try {
-                Socket1 = ss.accept();
-                System.out.println("client 1 connected");
-            } catch (IOException e) {
-                System.err.println("Accept failed.");
-                System.exit(1);
-            }
-            
-    //    string a = Socket1
-            
-            try {
-                Socket2 = ss.accept();
-                System.out.println("client 1 connected");
-            } catch (IOException e) {
-                System.err.println("Accept failed.");
-                System.exit(1);
-            }
-            
-            ServerHandler= new Handler(Socket1, Socket2);
-            ServerHandler.start();
+        
+        try {
+        Socket1 = ss.accept();
+        System.out.println("client 1 connected");
+        p=new player(Socket1);
+        v= new validation(p);
+        v.start();
+        } catch (IOException e) {
+        System.err.println("Accept failed.");
+        System.exit(1);
         }
+
+        
+        /*        while (true) {
+        try {
+        Socket1 = ss.accept();
+        System.out.println("client 1 connected");
+        } catch (IOException e) {
+        System.err.println("Accept failed.");
+        System.exit(1);
+        }
+        
+        //    string a = Socket1
+        
+        try {
+        Socket2 = ss.accept();
+        System.out.println("client 1 connected");
+        } catch (IOException e) {
+        System.err.println("Accept failed.");
+        System.exit(1);
+        }
+        
+        ServerHandler= new Handler(Socket1, Socket2);
+        ServerHandler.start();
+        }*/
     }
 }
