@@ -6,7 +6,7 @@
 package backgammon01.sql;
 
 import backgammon01.Server.player;
-import backgammon01.Server.Handler;
+import backgammon01.Server.Game;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -25,7 +25,7 @@ public class newGame extends sqlMain implements Runnable{
         tokens[1]= ""+player2.getToken();
     }
 
-    private Handler game;
+    private Game game;
     private ResultSet rs;
     private player player1,player2; 
     private String[] tokens =new String[2];

@@ -5,16 +5,17 @@
  */
 package backgammon01.Server;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import backgammon01.sql.logIn;
 import backgammon01.sql.newPlyer;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import backgammon01.Server.player.playerStatus;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import TurenLibrey.messages.Message;
+import TurenLibrey.messages.mesLogin;
+import java.net.Socket;
 
 /**
  *
@@ -22,51 +23,71 @@ import backgammon01.Server.player.playerStatus;
  */
 public class validation extends Thread {
 
-    public validation(player client) {
+    public validation(Socket client, conectClients next) {
         this.client = client;
+        this.next = next;
 
+        vladPlyer = new player(client);
         try {
-            in = new InputStreamReader(client.getNet().getInputStream());
-            bf = new BufferedReader(in);
-            pr = new PrintWriter(client.getNet().getOutputStream());
+            out = new ObjectOutputStream(client.getOutputStream());
+            in = new ObjectInputStream(client.getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private InputStreamReader in;// = new InputStreamReader(s.getInputStream());
-    private BufferedReader bf;// = new BufferedReader(in);
-    private PrintWriter pr;// =new PrintWriter(s.getOutputStream());
-    private newPlyer logUp;
-    private logIn logIn;
-    private player client;
-    private String user, password;
+    private Socket client;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private Message hello;
+    private Message tmp;
+    private player vladPlyer;
+    public conectClients next;
 
     @Override
     public void run() {
-        pr.println("hello from the server");
-        pr.flush();
-        System.out.println("send");
-        do {
-            try {
-                user = bf.readLine();
-                password = bf.readLine();
-            } catch (IOException ex) {
-                Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            logIn = new logIn(user, password, client);
-
-        } while (client.getStatus() == playerStatus.no);
-
-        pr.println("welcom");
-        pr.flush();
-
-        System.out.println("finish");
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
+            Dovalidation();
+        } catch (IOException ex) {
+            Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void Dovalidation() throws IOException, ClassNotFoundException {
+
+        hello = new Message(1, null, 0);
+
+        out.writeObject(hello);
+
+        for (int i = 0; i < 3; i++) {
+
+            tmp = (Message) in.readObject();
+
+            if (tmp.getId() == 2) {
+                mesLogin tmpMesLogin = (mesLogin) tmp.getObj();
+                logIn logIn = new logIn(tmpMesLogin.getId(), tmpMesLogin.getPassword(), vladPlyer);
+            } else if (tmp.getId() == 3) {
+                mesLogin tmpMesLogin = (mesLogin) tmp.getObj();
+                newPlyer logUp = new newPlyer(tmpMesLogin.getId(), tmpMesLogin.getPassword(), vladPlyer);
+            } else {
+
+                hello = new Message(-1, null, 0);
+                out.writeObject(hello);
+
+            }
+            if (vladPlyer.getStatus() == playerStatus.yes) {
+
+                next.add(vladPlyer);
+                Thread.currentThread().stop();
+            }
+            //logIn =(logIn) tmp.getObj();
+
+        }
+
+        vladPlyer.sendString(-1, "sorry", 0);
+
     }
 
 }

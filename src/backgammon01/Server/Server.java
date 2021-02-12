@@ -9,6 +9,8 @@ import backgammon01.backgammon.board;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,20 +19,7 @@ import java.net.Socket;
 public class Server {
 
     public Server() {
-        start();
-    }
-
-    
-    
-    private ServerSocket ss;
-    private Socket Socket1, Socket2;
-    private int token1, token2;
-    private Handler ServerHandler;
-    private player p;
-    private validation v;
-
-    public void start(){
-    
+        
         try {
             ss = new ServerSocket(4447);
         } catch (IOException e) {
@@ -38,18 +27,39 @@ public class Server {
             System.exit(1);
         }
         
-        try {
-        Socket1 = ss.accept();
-        System.out.println("client 1 connected");
-        p=new player(Socket1);
-        v= new validation(p);
-        v.start();
-        } catch (IOException e) {
-        System.err.println("Accept failed.");
-        System.exit(1);
+        doConect = new conectClients();
+        doConect.start();
+        start();
+    }
+
+    
+    
+    private ServerSocket ss;
+    private Socket Socket;
+    private validation doValidation;
+    private conectClients doConect;
+
+    public void start(){
+
+        while(true){
+        
+            try {
+                Socket = ss.accept();
+                System.out.println("client connected");
+                doValidation = new validation(Socket, doConect);
+            } catch (IOException ex) {
+                System.err.println("Accept failed.");
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            Socket = null;
+            doValidation = null;
+        
         }
 
-        
+
+    }
+}
         /*        while (true) {
         try {
         Socket1 = ss.accept();
@@ -72,5 +82,3 @@ public class Server {
         ServerHandler= new Handler(Socket1, Socket2);
         ServerHandler.start();
         }*/
-    }
-}

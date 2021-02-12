@@ -5,7 +5,7 @@
  */
 package backgammon01.backgammon;
 
-import backgammon01.Server.Handler;
+import backgammon01.Server.Game;
 import backgammon01.Server.Listener;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class moveToEnd extends Move {
 
-    public moveToEnd(board moveBoard, Handler.color thisColor,ArrayList<Integer> steps,Listener lis) {
+    public moveToEnd(board moveBoard, Game.color thisColor,ArrayList<Integer> steps,Listener lis) {
         super(moveBoard, thisColor,lis);
         super.steps=steps;
         start();
@@ -28,7 +28,7 @@ public class moveToEnd extends Move {
     private int index;
 
     public final void start() {
-        if (thisColor == Handler.color.whith) {
+        if (thisColor == Game.color.whith) {
             plase = 27;
             plaseForFunk = 20;
             index = 1;

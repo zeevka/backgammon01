@@ -5,14 +5,13 @@
  */
 package backgammon01.Server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import TurenLibrey.messages.Message;
+import java.io.ObjectInputStream;
 
 /**
  *
@@ -22,54 +21,111 @@ public class Listener extends Thread {
 
     public Listener(Socket client) throws IOException {
         this.client = client;
-        input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        mes = new ArrayList<String>();
-        
-        
-    }
-    
-    private Socket client;
-    private BufferedReader input;
-    private String str;
-    private ArrayList<String> mes;
+        messeges = new ArrayList<Message>();
+        in = new ObjectInputStream(client.getInputStream());
 
+    }
+
+    private Socket client;
+    private ObjectInputStream in;
+    private String str;
+    private ArrayList<Message> messeges;
+    private ArrayList<Integer> waits = new ArrayList<>();
+    private boolean isCame;
 
     @Override
     public void run() {
-        PrintWriter pr;
-        try {
-            pr = new PrintWriter(client.getOutputStream());
-            pr.println("hey from server");
-            pr.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (true) {
-        try {
-        str = input.readLine();
-        mes.add(str);
-        System.out.println("client: " + str);
-        str = "";        
-        } catch (IOException ex) {
-        System.err.println("we have a problem");
-        }
-
-        }
+        theListener();
     }
 
-    public int giv(int a) {
-
-       // mes.remove(mes.size()-1);
-        while(mes.size()==0){
+    public void theListener() {
+        Message tmp;
+        while (true) {
+            tmp=null;
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
+                tmp = (Message) in.readObject();
+            } catch (IOException ex) {
+                Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            messeges.add(tmp);
         }
-        mes.remove(mes.size()-1);
-        return Integer.parseInt(str) ;
 
     }
+    
+    public Message getMesseg(int token){
+
+        while(true){
+        
+            
+        }
+    }
+
+    public ArrayList<Message> getMesseges() {
+        return messeges;
+    }
+
+    public void setMesseges(ArrayList<Message> messeges) {
+        this.messeges = messeges;
+    }
+
+    public ArrayList<Integer> getWaits() {
+        return waits;
+    }
+
+    public void setWaits(ArrayList<Integer> waits) {
+        this.waits = waits;
+    }
+
+    public boolean isIsCame() {
+        return isCame;
+    }
+
+    public void setIsCame(boolean isCame) {
+        this.isCame = isCame;
+    }
+    
+    
+
 }
+/*  
+ @Override
+ public void run() {
+ PrintWriter pr;
+ try {
+ pr = new PrintWriter(client.getOutputStream());
+ pr.println("hey from server");
+ pr.flush();
+ } catch (IOException ex) {
+ Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+ }
+
+ while (true) {
+ try {
+ str = input.readLine();
+ mes.add(str);
+ System.out.println("client: " + str);
+ str = "";        
+ } catch (IOException ex) {
+ System.err.println("we have a problem");
+ }
+
+ }
+ }
+
+ public int giv(int a) {
+    
+ // mes.remove(mes.size()-1);
+ while(mes.size()==0){
+ try {
+ Thread.sleep(100);
+ } catch (InterruptedException ex) {
+ Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+ }
+ }
+ mes.remove(mes.size()-1);
+ return Integer.parseInt(str) ;
+    
+ }*/

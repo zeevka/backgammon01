@@ -5,7 +5,7 @@
  */
 package backgammon01.backgammon;
 
-import backgammon01.Server.Handler.color;
+import backgammon01.Server.Game.color;
 import backgammon01.backgammon.square.ColorStatus;
 import java.util.ArrayList;
 
@@ -263,6 +263,26 @@ public class board {
     public ColorStatus getStatus(int square) {
 
         return theBoard[square].getStatus();
+    }
+    
+    /**
+     * this function take the board and convert it to int array 
+     * @return 
+     */
+    public int[] toIntArray() {
+        int[] send = new int[27];
+        int tmp;
+
+        for (int index = 0; index < 27; index++) {
+
+            tmp=theBoard[index].getAmountOfPieces();
+            
+            if(theBoard[index].getStatus()==ColorStatus.Black){
+                tmp*=-1;
+            }
+            send[index]=tmp;
+        }
+        return send;
     }
 
 }

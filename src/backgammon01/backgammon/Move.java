@@ -5,7 +5,7 @@
  */
 package backgammon01.backgammon;
 
-import backgammon01.Server.Handler.color;
+import backgammon01.Server.Game.color;
 import backgammon01.Server.Listener;
 import backgammon01.backgammon.square.ColorStatus;
 import java.util.ArrayList;

@@ -16,9 +16,9 @@ import java.util.logging.Logger;
  *
  * @author zeev7
  */
-public class Handler extends Thread{
+public class Game extends Thread{
 
-    public Handler(Socket player1, Socket player2) {
+    public Game(Socket player1, Socket player2) {
         this.GameBoard = new board();
         this.player1=player1;
         this.player2=player2;
@@ -28,7 +28,7 @@ public class Handler extends Thread{
             lis2=new Listener(player2);
 
         } catch (IOException ex) {
-            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

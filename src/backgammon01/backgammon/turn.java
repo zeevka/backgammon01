@@ -5,9 +5,8 @@
  */
 package backgammon01.backgammon;
 
-import backgammon01.Server.Handler;
-import backgammon01.Server.Handler.color;
-import backgammon01.Server.hendler_turn;
+import backgammon01.Server.Game;
+import backgammon01.Server.Game.color;
 import backgammon01.Server.Listener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,17 +19,16 @@ import java.util.Random;
  */
 public class turn {
 
-    public turn(board turnBoard, Handler.color playerColor,Listener lis) {
+    public turn(board turnBoard, Game.color playerColor,Listener lis) {
         this.lis =lis;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
-        this.a=a;
 
      //   System.out.println("\n" + turnBoard.getNum(1) + "  " + turnBoard.getNum(26) + "\n");
-        steps = startSteps();
+        //steps = startSteps();
        // a.send(steps.get(0) + " " + steps.get(1));
-       System.out.println(steps.get(0) + " " + steps.get(1));
+        System.out.println(steps.get(0) + " " + steps.get(1));
         turnMove();
     }
 
@@ -40,10 +38,9 @@ public class turn {
     }*/
     private Listener lis;
     private board turnBoard;
-    private Handler.color playerColor;
+    private Game.color playerColor;
     private int numOfKills;
-    private hendler_turn a;
-    ArrayList<Integer> steps = new ArrayList<Integer>();
+    public ArrayList<Integer> steps = new ArrayList<Integer>();
 
 
     /**
@@ -69,7 +66,7 @@ public class turn {
 
             tmp.addAll(Arrays.asList(tmp.get(0), tmp.get(0)));
         }
-        if (playerColor == Handler.color.black) {
+        if (playerColor == Game.color.black) {
             for (int i = 0; i < tmp.size(); i++) {
 
                 tmp.set(i, tmp.get(i) * -1);
@@ -77,6 +74,7 @@ public class turn {
             }
         }
 
+        steps = tmp;
         return tmp;
     }
 
@@ -107,7 +105,7 @@ public class turn {
 
         int sum = 0, num, plase, i;
 
-        if (playerColor == Handler.color.whith) {
+        if (playerColor == Game.color.whith) {
             num = 20;
             plase = 27;
         } else {

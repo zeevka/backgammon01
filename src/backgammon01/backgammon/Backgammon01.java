@@ -6,7 +6,7 @@
 package backgammon01.backgammon;
 
 import backgammon01.Server.Server;
-import backgammon01.Server.Handler.color;
+import backgammon01.Server.Game.color;
 import backgammon01.sql.sqlMain;
 import java.sql.SQLException;
 import backgammon01.Server.player;
