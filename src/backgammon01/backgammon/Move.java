@@ -25,9 +25,9 @@ public class Move {
      * @param moveBoard get the board
      * @param thisColor
      */
-    public Move(board moveBoard, color thisColor, Listener lis) {
+    public Move(board moveBoard, color thisColor) {
 
-        this.lis = lis;
+        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
     }
@@ -39,9 +39,9 @@ public class Move {
      * @param thisColor get the player color
      * @param steps get the result from the dice
      */
-    public Move(board moveBoard, color thisColor, ArrayList<Integer> steps, Listener lis) {
+    public Move(board moveBoard, color thisColor, ArrayList<Integer> steps) {
 
-        this.lis = lis;
+        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
         this.steps = steps;
@@ -56,9 +56,9 @@ public class Move {
      * @param thisColor get the player color
      * @param stam yhe step to do
      */
-    public Move(board moveBoard, color thisColor, int stam, Listener lis) {
+    public Move(board moveBoard, color thisColor, int stam) {
 
-        this.lis = lis;
+        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
         this.steps = new ArrayList<>();
@@ -71,7 +71,6 @@ public class Move {
     protected int step1, step2;
     protected int[] XXXXXXCange;
     protected board moveBoard;
-    protected Listener lis;
     ArrayList<Integer> steps = new ArrayList<Integer>();
 
     /**
@@ -82,9 +81,9 @@ public class Move {
         int tmp, thestep;
 
         for (int index = 0; index < steps.size(); index++) {
-           //tmp = in.nextInt();
+           tmp = in.nextInt();
 
-            tmp = lis.giv(0);
+           // tmp = lis.giv(0);
 
             thestep = steps.get(index);
             while (!(moveBoard.chekForOut(tmp, thisColor))

@@ -11,6 +11,7 @@ import backgammon01.sql.sqlMain;
 import java.sql.SQLException;
 import backgammon01.Server.player;
 import backgammon01.sql.newPlyer;
+import java.util.Random;
 /**
  *
  * @author zeev7
@@ -25,7 +26,8 @@ public class Backgammon01 {
         // to do server !
         // to do if isn't have any plase to move
 
-        Server s = new Server();
+        
+      Server s = new Server();
     }
 
 }

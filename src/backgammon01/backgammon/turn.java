@@ -7,28 +7,30 @@ package backgammon01.backgammon;
 
 import backgammon01.Server.Game;
 import backgammon01.Server.Game.color;
-import backgammon01.Server.Listener;
+import backgammon01.Server.sender;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import TurenLibrey.messages.Message;
+import TurenLibrey.messages.dises;
 
 /**
- * for evrt torn i open new object
+ * for evry torn i open new object
  *
  * @author zeev7
  */
 public class turn {
 
-    public turn(board turnBoard, Game.color playerColor,Listener lis) {
-        this.lis =lis;
+    public turn(board turnBoard, Game.color playerColor,sender playerSender, sender player2Sender) {
+        this.playerSender =playerSender;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
 
-     //   System.out.println("\n" + turnBoard.getNum(1) + "  " + turnBoard.getNum(26) + "\n");
-        //steps = startSteps();
-       // a.send(steps.get(0) + " " + steps.get(1));
-        System.out.println(steps.get(0) + " " + steps.get(1));
+        steps=startSteps();
+        dises tmpDises = new dises(steps);
+        sendObject(14, tmpDises, 0);
+        
         turnMove();
     }
 
@@ -36,10 +38,12 @@ public class turn {
     /*    public turn(board GameBoard, color color) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }*/
-    private Listener lis;
+    private sender playerSender;
     private board turnBoard;
     private Game.color playerColor;
     private int numOfKills;
+    private Move TheMove;
+    
     public ArrayList<Integer> steps = new ArrayList<Integer>();
 
 
@@ -74,7 +78,7 @@ public class turn {
             }
         }
 
-        steps = tmp;
+       
         return tmp;
     }
 
@@ -131,12 +135,30 @@ public class turn {
     /**
      * this function do the moves
      */
+    public int chekForKills(){
+    Move move;
+        if (getNumOfKills(playerColor) > 0) {
+            TheMove = new AfterKillMove(turnBoard, playerColor, steps);
+            // if still hve a kill pieces thet - 
+            if (getNumOfKills(playerColor) > 0) {
+                sendString(21, "you stiil have a kills",0);
+                return 0;
+            }
+            if(steps.size()==0){
+                sendString(22, "you don't have any more steps",0);
+                return 0;
+            }
+            
+        }
+        return 1;
+    }
+    
     public void turnMove() {
 
         Move move;
         //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
-            move = new AfterKillMove(turnBoard, playerColor, steps,lis);
+            TheMove = new AfterKillMove(turnBoard, playerColor, steps);
             // if still hve a kill pieces thet - 
             if (getNumOfKills(playerColor) > 0) {
                 return;
@@ -145,19 +167,38 @@ public class turn {
         }
         // if there is to meny pieces out of the aria
         if (chekTOout() > steps.size()) {
-            move = new Move(turnBoard, playerColor, steps,lis);
+            TheMove = new Move(turnBoard, playerColor, steps);
         } else {
 
             while (steps.size() > 0) {
                 // chek evry step if cen move to end
                 if (chekTOout() == 0) {
-                    move = new moveToEnd(turnBoard, playerColor,steps,lis);
+                    TheMove = new moveToEnd(turnBoard, playerColor,steps);
                     break;
                 } else {
-                    move = new Move(turnBoard, playerColor, steps.get(0),lis);
+                    TheMove = new Move(turnBoard, playerColor, steps.get(0));
                     steps.remove(0);
                 }
             }
         }
+    }
+    
+    public void sendString (int id ,String toSed,int token){
+
+        Message tmp = new Message(id, (Object)toSed,token);
+        playerSender.setMessege(tmp);
+        playerSender.start();
+    
+    }
+       public void sendObject (int id ,Object toSed,int token){
+
+        Message tmp = new Message(id,toSed,token);
+        playerSender.sendOBJ(toSed, id);
+    
+    }
+    enum turnStatus{
+    
+        witeToAfterKill,
+        
     }
 }

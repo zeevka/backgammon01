@@ -17,8 +17,8 @@ import java.util.Scanner;
  */
 public class moveToEnd extends Move {
 
-    public moveToEnd(board moveBoard, Game.color thisColor,ArrayList<Integer> steps,Listener lis) {
-        super(moveBoard, thisColor,lis);
+    public moveToEnd(board moveBoard, Game.color thisColor,ArrayList<Integer> steps) {
+        super(moveBoard, thisColor);
         super.steps=steps;
         start();
         mteMove();
@@ -93,8 +93,8 @@ public class moveToEnd extends Move {
             }
             tmp = 0;
             while (true) {
-                tmp =lis.giv(0);
-// tmp = s.nextInt();
+               // tmp =lis.giv(0);
+ tmp = s.nextInt();
                 //first check if in square tmp there is piece   next- chek if there is optien to do it
                 if (moveBoard.chekForOut(tmp, thisColor) && (tmp + steps.get(0) >= 1 && tmp + steps.get(0) <= 26)) {
                     if (tmp + steps.get(0)+index == plase) {

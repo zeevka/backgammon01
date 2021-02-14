@@ -19,8 +19,8 @@ import java.util.Scanner;
  */
 public class AfterKillMove extends Move {
 
-    public AfterKillMove(board moveBoard, Game.color thisColor, ArrayList<Integer> steps, Listener lis) {
-        super(moveBoard, thisColor,lis);
+    public AfterKillMove(board moveBoard, Game.color thisColor, ArrayList<Integer> steps) {
+        super(moveBoard, thisColor);
         start();
         super.steps = steps;
         if (check()) {
@@ -93,60 +93,57 @@ public class AfterKillMove extends Move {
 
             super.moveBoard.theMove(thisColor, place, place + steps.get(1));
             super.steps.remove(1);
-        } else if (numOfKill >= 2 && Bool1 && Bool2) {
-
-            super.moveBoard.theMove(thisColor, place, place + steps.get(0));
-            super.moveBoard.theMove(thisColor, place, place + steps.get(1));
-            super.steps.remove(1);
-            super.steps.remove(0);
-            if (numOfKill > 2 && super.steps.size() > 0) {
-                for (int i = 0; i < (numOfKill - 2); i++) {
-
-                    super.moveBoard.theMove(thisColor, place, place + steps.get(1));
-                }
-            }
         } else if (Bool1 && Bool2) {
-            if (steps.get(0) == steps.get(1)) {
-                super.moveBoard.theMove(thisColor, place, place + steps.get(0));
-                super.steps.remove(0);
+            if (numOfKill >= 2) {
+
+                while( numOfKill > 0 && super.steps.size() > 0) {
+                    super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+                    super.steps.remove(0);
+                }
+
             } else {
-                System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
-                int num;
-               // num = in.nextInt();
-             //   num = lis.giv(0);
-                while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
-                    System.out.println("erorr");
-                  //  num = in.nextInt();
-               //     num=lis.giv(0);
-                }
-                if (thisColor == color.whith) {
-                    super.moveBoard.theMove(thisColor, place, place + num);
-                } else {
-                    super.moveBoard.theMove(thisColor, place, place - num);
-                }
-                // to do for black !!!!
-                if (abs(steps.get(0)) == num) {
+                if (steps.get(0) == steps.get(1)) {
+                    super.moveBoard.theMove(thisColor, place, place + steps.get(0));
                     super.steps.remove(0);
                 } else {
-                    super.steps.remove(1);
+                    System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
+                    int num=0;
+                    // num = in.nextInt();
+                    //   num = lis.giv(0);
+                    while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
+                        System.out.println("erorr");
+                        //  num = in.nextInt();
+                        //     num=lis.giv(0);
+                    }
+                    if (thisColor == color.whith) {
+                        super.moveBoard.theMove(thisColor, place, place + num);
+                    } else {
+                        super.moveBoard.theMove(thisColor, place, place - num);
+                    }
+                    // to do for black !!!!
+                    if (abs(steps.get(0)) == num) {
+                        super.steps.remove(0);
+                    } else {
+                        super.steps.remove(1);
+                    }
                 }
+
             }
 
         }
-
     }
 
-
-    /*    public void next() {
-        
-     int numOfKill = super.moveBoard.getNum(place);
-     if (numOfKill > 0) {
-     return;
-     }
-     //to do next torn is normal
-     if (steps.size() > 0) {
-     super.game();
-     }
-        
-     }*/
 }
+
+/*    public void next() {
+        
+ int numOfKill = super.moveBoard.getNum(place);
+ if (numOfKill > 0) {
+ return;
+ }
+ //to do next torn is normal
+ if (steps.size() > 0) {
+ super.game();
+ }
+        
+ }*/
