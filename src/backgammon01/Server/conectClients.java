@@ -27,7 +27,7 @@ public class conectClients extends Thread{
     public void conect(){
     
         player player1,player2;
-        Game handler;
+        Game newGame;
         while (true){
         
             if(players.size()>=2){
@@ -40,7 +40,8 @@ public class conectClients extends Thread{
                         
                             if(players.get(index).getStatus()==player.playerStatus.wait){
                             player2=players.get(index);
-                                handler=new Game(player1.getNet(), player2.getNet());
+                                newGame = new Game(player1, player2);
+                                newGame.start();
                                 player1=player2=null;
                                 break;
                             }

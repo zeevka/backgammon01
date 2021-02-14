@@ -9,6 +9,7 @@ import backgammon01.backgammon.board;
 import backgammon01.backgammon.turn;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,47 +17,61 @@ import java.util.logging.Logger;
  *
  * @author zeev7
  */
-public class Game extends Thread{
+public class Game extends Thread {
 
-    public Game(Socket player1, Socket player2) {
+    public Game(player playeri1, player playeri2) {
         this.GameBoard = new board();
-        this.player1=player1;
-        this.player2=player2;
-        
-        try {
-            lis1=new Listener(player1);
-            lis2=new Listener(player2);
-
-        } catch (IOException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        if (getRand() == 0) {
+            this.player1 = playeri1;
+            this.player2 = playeri2;
+        } else {
+            this.player1 = playeri2;
+            this.player2 = playeri1;
         }
-        
+
+        starting();
+        System.out.println("new game ");
     }
-    
+
     private int a;
-   private board GameBoard;
-    private Socket player1, player2;
+    private board GameBoard;
+    private player player1, player2;
     private Listener lis1, lis2;
     private turn c;
 
-
     @Override
     public void run() {
-        lis1.start();
+        /*        lis1.start();
         lis2.start();
         while (true) {
-        c = new turn(GameBoard, color.whith,lis1);
+        c = new turn(GameBoard, color.whith, lis1);
         c = null;
-        c = new turn(GameBoard, color.black,lis2);
+        c = new turn(GameBoard, color.black, lis2);
         c = null;
-        }
+        }*/
     }
 
-   public enum color{
+    private int getRand() {
+        Random rand = new Random();
+        return rand.nextInt(2);
+    }
+    
+    public void starting(){
+    
+        player1.sendString(10, "welcome white",10);
+        player1.sendString(10, "welcome black",11);
+        
+    
+    }
+
+    public enum color {
+
         whith,
         black;
     }
 
+   //////////////////////////////////////////////
+    //geters and seters
     public int getA() {
         return a;
     }
@@ -71,22 +86,6 @@ public class Game extends Thread{
 
     public void setGameBoard(board GameBoard) {
         this.GameBoard = GameBoard;
-    }
-
-    public Socket getPlayer1() {
-        return player1;
-    }
-
-    public void setPlayer1(Socket player1) {
-        this.player1 = player1;
-    }
-
-    public Socket getPlayer2() {
-        return player2;
-    }
-
-    public void setPlayer2(Socket player2) {
-        this.player2 = player2;
     }
 
     public Listener getLis1() {
@@ -113,5 +112,4 @@ public class Game extends Thread{
         this.c = c;
     }
 
-   
 }

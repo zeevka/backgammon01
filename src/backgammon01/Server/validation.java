@@ -58,7 +58,6 @@ public class validation extends Thread {
     public void Dovalidation() throws IOException, ClassNotFoundException {
 
         hello = new Message(1, null, 0);
-
         out.writeObject(hello);
 
         for (int i = 0; i < 3; i++) {

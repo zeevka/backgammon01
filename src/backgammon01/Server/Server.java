@@ -47,6 +47,7 @@ public class Server {
                 Socket = ss.accept();
                 System.out.println("client connected");
                 doValidation = new validation(Socket, doConect);
+                doValidation.start();
             } catch (IOException ex) {
                 System.err.println("Accept failed.");
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
