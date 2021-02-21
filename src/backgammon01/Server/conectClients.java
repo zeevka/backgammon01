@@ -15,8 +15,16 @@ import java.util.logging.Logger;
  */
 public class conectClients extends Thread{
 
+    public conectClients() {
+     players = new ArrayList<player>();
+     numOfWaits=0;
+        System.out.println("conect Clients ");
+    }
+
     
-    private ArrayList<player> players = new ArrayList<player>();
+    
+    private ArrayList<player> players;
+    private int numOfWaits;
 
     @Override
     public void run() {
@@ -25,41 +33,50 @@ public class conectClients extends Thread{
     }
     
     public void conect(){
-    
-        player player1,player2;
-        Game newGame;
+
         while (true){
-        
             if(players.size()>=2){
-            
-                for(int index =0;index >players.size();index++){
-                
+                for(int index =0;index < players.size();index++){
                     if(players.get(index).getStatus()==player.playerStatus.wait){
-                    player1=players.get(index);
-                        for(;index >players.size();index++){
+                        System.out.println("1 client wait");
                         
-                            if(players.get(index).getStatus()==player.playerStatus.wait){
-                            player2=players.get(index);
-                                newGame = new Game(player1, player2);
-                                newGame.start();
-                                player1=player2=null;
-                                break;
-                            }
-                        }
+                        index=onePlay(index);
                     }
                 }
             }
         
             try {
-                Thread.sleep(10);
+                Thread.sleep(20);
             } catch (InterruptedException ex) {
                 Logger.getLogger(conectClients.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
+    public int onePlay(int playerIndex) {
+        Game newGame;
+        int index = playerIndex + 1;
+        for (; index < players.size(); index++) {
+            if (players.get(index).getStatus() == player.playerStatus.wait) {
+                System.out.println("2 client wait");
+
+                players.get(playerIndex).setStatus(player.playerStatus.inGame);
+                players.get(index).setStatus(player.playerStatus.inGame);
+
+                newGame = new Game(players.get(playerIndex), players.get(index));
+                newGame.start();
+                numOfWaits -= 2;
+
+                break;
+            }
+
+        }
+        return index;
+    }
     public void add(player toAdd){
     
         players.add(toAdd);
+        System.out.println("adddddd");
+        
         
     }
     

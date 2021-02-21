@@ -27,6 +27,7 @@ public class validation extends Thread {
         this.client = client;
         this.next = next;
 
+        System.out.println("new validation");
         vladPlyer = new player(client);
         try {
             out = new ObjectOutputStream(client.getOutputStream());
@@ -57,19 +58,24 @@ public class validation extends Thread {
 
     public void Dovalidation() throws IOException, ClassNotFoundException {
 
-        hello = new Message(1, null, 0);
+        hello = new Message(1, null, 333);
         out.writeObject(hello);
+        System.out.println("welcome send");
 
         for (int i = 0; i < 3; i++) {
 
             tmp = (Message) in.readObject();
+            
 
             if (tmp.getId() == 2) {
                 mesLogin tmpMesLogin = (mesLogin) tmp.getObj();
+                System.out.println("client: "+tmpMesLogin.getId()+"  "+ tmpMesLogin.getPassword());
                 logIn logIn = new logIn(tmpMesLogin.getId(), tmpMesLogin.getPassword(), vladPlyer);
+                logIn.run();
             } else if (tmp.getId() == 3) {
                 mesLogin tmpMesLogin = (mesLogin) tmp.getObj();
                 newPlyer logUp = new newPlyer(tmpMesLogin.getId(), tmpMesLogin.getPassword(), vladPlyer);
+                logUp.run();
             } else {
 
                 hello = new Message(-1, null, 0);
@@ -77,9 +83,19 @@ public class validation extends Thread {
 
             }
             if (vladPlyer.getStatus() == playerStatus.yes) {
+                System.out.println("player conect");
 
+                vladPlyer.setStatus(playerStatus.wait);
                 next.add(vladPlyer);
+                hello = new Message(5, null, 0);
+                out.writeObject(hello);
                 Thread.currentThread().stop();
+            }else {
+
+                System.out.println("player f");
+                hello = new Message(-1, null, 0);
+                out.writeObject(hello);
+
             }
             //logIn =(logIn) tmp.getObj();
 

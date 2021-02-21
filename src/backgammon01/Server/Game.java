@@ -29,8 +29,9 @@ public class Game extends Thread {
             this.player2 = playeri1;
         }
 
-        starting();
         System.out.println("new game ");
+        starting();
+       
     }
 
     private int a;
@@ -57,11 +58,8 @@ public class Game extends Thread {
     }
     
     public void starting(){
-    
         player1.sendString(10, "welcome white",10);
         player1.sendString(10, "welcome black",11);
-        
-    
     }
 
     public enum color {
