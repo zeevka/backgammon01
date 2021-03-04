@@ -7,11 +7,7 @@ package backgammon01.backgammon;
 
 import backgammon01.Server.Game;
 import backgammon01.Server.Game.color;
-import backgammon01.Server.Listener;
-import backgammon01.backgammon.square.ColorStatus;
-import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -21,63 +17,36 @@ public class AfterKillMove extends Move {
 
     public AfterKillMove(board moveBoard, Game.color thisColor, ArrayList<Integer> steps) {
         super(moveBoard, thisColor);
-        start();
+        initialization();
         super.steps = steps;
-        if (check()) {
-            themove();
-        }
+        themove();
+        
     }
 
     /**
-     * plase - the end of the board start - for the function thet chek to out
+     * plase - the end of the board 
      */
-    int start, place;
+    private int place;
+    private boolean option = false;
+    
 
     /**
      * this function to start the variables for according to player color
      */
-    public void start() {
+    public void initialization() {
 
         if (thisColor == color.whith) {
-
-            start = place = 1;
-
+           place = 1;
         } else {
-
-            start = 20;
             place = 26;
         }
     }
 
-    /**
-     * this function chek if there is eny option to put in a kill piece
-     *
-     * @return
-     */
-    public boolean check() {
-        ColorStatus squareColor, anmyColor;
-        int num;
-        if (thisColor == color.whith) {
-            anmyColor = ColorStatus.Black;
-        } else {
-            anmyColor = ColorStatus.White;
-        }
-        for (int i = 0; i < 6; i++) {
-            squareColor = super.moveBoard.getStatus(i + start);
-            num = super.moveBoard.getNum(i + start);
-            if (!(squareColor == anmyColor && num > 1)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     /**
      * this function do the actually move
      */
     public void themove() {
-        Scanner in = new Scanner(System.in);
         boolean Bool1, Bool2;
         int numOfKill = super.moveBoard.getNum(place);
 
@@ -85,6 +54,9 @@ public class AfterKillMove extends Move {
         Bool1 = super.moveBoard.chekForIn(place + steps.get(0), thisColor);
         Bool2 = super.moveBoard.chekForIn(place + steps.get(1), thisColor);
 
+        if (!Bool1&&!Bool2){
+            return;
+        }
         if (Bool1 && !Bool2) {
 
             super.moveBoard.theMove(thisColor, place, place + steps.get(0));
@@ -106,10 +78,68 @@ public class AfterKillMove extends Move {
                     super.moveBoard.theMove(thisColor, place, place + steps.get(0));
                     super.steps.remove(0);
                 } else {
+                    option= true;
+                    //todo
+                    //System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
+                }
+
+            }
+
+        }
+    }
+    
+    @Override
+    public boolean doStep(int from, int stepToDo){
+    
+        if(from != -1){
+            return false;
+        }
+        if(stepToDo != 0 && stepToDo != 1){
+            return false;
+        }
+        super.moveBoard.theMove(thisColor, place, place + super.steps.get(stepToDo));
+        steps.remove(stepToDo);
+        return true;
+        
+    }
+
+    public boolean isOption() {
+        return option;
+    }
+}
+
+    /**
+     * this function chek if there is eny option to put in a kill piece
+     *
+     * @return
+     *
+    public boolean check() {
+        ColorStatus squareColor, anmyColor;
+        int num;
+        if (thisColor == color.whith) {
+            anmyColor = ColorStatus.Black;
+        } else {
+            anmyColor = ColorStatus.White;
+        }
+        for (int i = 0; i < 6; i++) {
+            squareColor = super.moveBoard.getStatus(i + start);
+            num = super.moveBoard.getNum(i + start);
+            if (!(squareColor == anmyColor && num > 1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+*/
+
+/* 
+                    option= true;
                     System.out.println(abs(steps.get(0)) + " or " + abs(steps.get(1)) + " ?");
                     int num=0;
                     // num = in.nextInt();
-                    //   num = lis.giv(0);
+                    //   num = lis.giv(0);a
+                    
                     while (!(num == abs(steps.get(1)) || num == abs(steps.get(0)))) {
                         System.out.println("erorr");
                         //  num = in.nextInt();
@@ -126,16 +156,8 @@ public class AfterKillMove extends Move {
                     } else {
                         super.steps.remove(1);
                     }
-                }
 
-            }
-
-        }
-    }
-
-}
-
-/*    public void next() {
+public void next() {
         
  int numOfKill = super.moveBoard.getNum(place);
  if (numOfKill > 0) {
@@ -146,4 +168,27 @@ public class AfterKillMove extends Move {
  super.game();
  }
         
- }*/
+ }
+
+    
+    
+    
+    
+    
+    public void doPlqyerChoice(boolean q) {
+
+        int p = 0;
+        if(q){
+        p=1;
+        }
+        if (thisColor == color.whith) {
+            super.moveBoard.theMove(thisColor, place, place + abs(steps.get(p)));
+        } else {
+            super.moveBoard.theMove(thisColor, place, place - abs(steps.get(p)));
+        }
+        // to do for black !!!!
+            super.steps.remove(p);
+       
+    }
+
+*/

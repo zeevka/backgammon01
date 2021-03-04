@@ -6,12 +6,7 @@
 package backgammon01.backgammon;
 
 import backgammon01.Server.Game.color;
-import backgammon01.Server.Listener;
-import backgammon01.backgammon.square.ColorStatus;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
 
 /**
  *
@@ -27,7 +22,6 @@ public class Move {
      */
     public Move(board moveBoard, color thisColor) {
 
-        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
     }
@@ -41,7 +35,6 @@ public class Move {
      */
     public Move(board moveBoard, color thisColor, ArrayList<Integer> steps) {
 
-        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
         this.steps = steps;
@@ -58,7 +51,6 @@ public class Move {
      */
     public Move(board moveBoard, color thisColor, int stam) {
 
-        
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
         this.steps = new ArrayList<>();
@@ -68,33 +60,51 @@ public class Move {
     }
 
     protected color thisColor;
-    protected int step1, step2;
-    protected int[] XXXXXXCange;
     protected board moveBoard;
     ArrayList<Integer> steps = new ArrayList<Integer>();
 
-    /**
-     * this is a function for normal move to do the move
-     */
-    public void game() {
-        Scanner in = new Scanner(System.in);
-        int tmp, thestep;
+    public boolean doStep(int from, int stepToDo){
 
-        for (int index = 0; index < steps.size(); index++) {
-           tmp = in.nextInt();
-
-           // tmp = lis.giv(0);
-
-            thestep = steps.get(index);
-            while (!(moveBoard.chekForOut(tmp, thisColor))
-                    || !(moveBoard.chekForIn(tmp + thestep, thisColor))) {
-                System.out.println("error");
-                tmp = in.nextInt();
-            }
-            moveBoard.theMove(thisColor, tmp, tmp + thestep);
+        if (!(moveBoard.chekForOut(from, thisColor))){
+            return false;
         }
+        if(steps.size()<stepToDo){
+            return false;
+        }
+        if(!(moveBoard.chekForIn(from + stepToDo, thisColor))){
+            return false;
+        }
+        moveBoard.theMove(thisColor, from, from + steps.get(stepToDo));
+        steps.remove(stepToDo);
+        return true;
+       
     }
+    
+    
+    
+    
+        public void game() {
+        System.err.println("this function is dead");
+        /*        Scanner in = new Scanner(System.in);
+        int tmp, thestep;
+        
+        for (int index = 0; index < steps.size(); index++) {
+        tmp = in.nextInt();
+        
+        // tmp = lis.giv(0);
+        
+        thestep = steps.get(index);
+        while (!(moveBoard.chekForOut(tmp, thisColor))
+        || !(moveBoard.chekForIn(tmp + thestep, thisColor))) {
+        System.out.println("error");
+        tmp = in.nextInt();
+        }
+        moveBoard.theMove(thisColor, tmp, tmp + thestep);
+        }*/
+    }
+    
 }
+
 /*    public ArrayList<Integer> startMove(){
 
  ArrayList<Integer> tmp = new ArrayList<Integer>

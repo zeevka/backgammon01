@@ -5,6 +5,8 @@
  */
 package backgammon01.backgammon;
 
+
+import TurenLibrey.messages.mesLogin;
 import backgammon01.Server.Server;
 import backgammon01.Server.Game.color;
 import backgammon01.sql.sqlMain;
@@ -14,6 +16,7 @@ import backgammon01.sql.newPlyer;
 import java.util.Random;
 /**
  *
+ * 
  * @author zeev7
  */
 public class Backgammon01 {
@@ -26,6 +29,9 @@ public class Backgammon01 {
         // to do server !
         // to do if isn't have any plase to move
 
+        /*        player a = new player();
+        mesLogin l = new mesLogin("aaa","aaa");
+        newPlyer n = new newPlyer(null, null, a);*/
         
       Server s = new Server();
     }

@@ -15,10 +15,17 @@ public class MessageHendler {
   
     private Game playerGame;
     private Message theMessage;
+    private int id;
     
+    public void hendler(){
     
+        switch(id){
+        
+        
+            
+        }
     
-    
+    }
     
     
 }

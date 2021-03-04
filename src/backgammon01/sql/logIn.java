@@ -9,8 +9,6 @@ import backgammon01.Server.player.playerStatus;
 import backgammon01.Server.player;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,9 +43,10 @@ public class logIn extends sqlMain implements Runnable {
 
         if (token== 0) {
             player.setStatus(playerStatus.no);
-
+            System.out.println("sql:    no");
         } else {
             player.setStatus(playerStatus.yes);
+            System.out.println("sql:    yes");
         }
         player.setToken(token);
         System.out.println(player.getStatus());
