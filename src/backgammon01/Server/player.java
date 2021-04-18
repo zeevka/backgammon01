@@ -27,6 +27,7 @@ public class player {
     private int token;
     private playerStatus status;
     private sender send;
+    private Listener playerListiner;
     
     
     public enum playerStatus{
@@ -93,6 +94,24 @@ public class player {
     public void setStatus(playerStatus status) {
         this.status = status;
     }
+
+    public sender getSend() {
+        return send;
+    }
+
+    public void setSend(sender send) {
+        this.send = send;
+    }
+
+    public Listener getPlayerListiner() {
+        return playerListiner;
+    }
+
+    public void setPlayerListiner(Listener playerListiner) {
+        this.playerListiner = playerListiner;
+    }
+    
+    
     
     
 }

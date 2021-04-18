@@ -12,7 +12,11 @@ import TurenLibrey.messages.Message;
  * @author zeev7
  */
 public class MessageHendler {
+
+    public MessageHendler() {
+    }
   
+    
     private Game playerGame;
     private Message theMessage;
     private int id;
@@ -21,6 +25,7 @@ public class MessageHendler {
     
         switch(id){
         
+            
         
             
         }

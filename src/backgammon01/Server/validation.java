@@ -82,12 +82,14 @@ public class validation extends Thread {
                 out.writeObject(hello);
 
             }
+            //todo: wait the thread wil finish
             if (vladPlyer.getStatus() == playerStatus.yes) {
                 System.out.println("player conect");
 
                 vladPlyer.setStatus(playerStatus.wait);
                 next.add(vladPlyer);
                 hello = new Message(5, null, 0);
+                
                 out.writeObject(hello);
                 Thread.currentThread().stop();
             }else {

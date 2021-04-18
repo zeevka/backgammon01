@@ -7,6 +7,7 @@ package backgammon01.backgammon;
 
 import backgammon01.Server.Game.color;
 import java.util.ArrayList;
+import TurenLibrey.messages.Step;
 
 /**
  *
@@ -21,7 +22,6 @@ public class Move {
      * @param thisColor
      */
     public Move(board moveBoard, color thisColor) {
-
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
     }
@@ -34,12 +34,9 @@ public class Move {
      * @param steps get the result from the dice
      */
     public Move(board moveBoard, color thisColor, ArrayList<Integer> steps) {
-
         this.moveBoard = moveBoard;
         this.thisColor = thisColor;
         this.steps = steps;
-        game();
-
     }
 
     /**
@@ -56,29 +53,37 @@ public class Move {
         this.steps = new ArrayList<>();
         steps.add(stam);
 
-        game();
     }
 
     protected color thisColor;
     protected board moveBoard;
+    protected boolean wait;
     ArrayList<Integer> steps = new ArrayList<Integer>();
+    ArrayList<Step> moves = new ArrayList<Step>();
+    
 
     public boolean doStep(int from, int stepToDo){
 
-        if (!(moveBoard.chekForOut(from, thisColor))){
-            return false;
-        }
         if(steps.size()<stepToDo){
             return false;
         }
-        if(!(moveBoard.chekForIn(from + stepToDo, thisColor))){
+        if( moveBoard.theMove(thisColor, from, from + steps.get(stepToDo))){
+            steps.remove(stepToDo);
+            return true;
+        }else{
             return false;
         }
-        moveBoard.theMove(thisColor, from, from + steps.get(stepToDo));
-        steps.remove(stepToDo);
-        return true;
        
     }
+
+    public boolean isWait() {
+        return wait;
+    }
+
+    public void setWait(boolean wait) {
+        this.wait = wait;
+    }
+    
     
     
     

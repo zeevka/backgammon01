@@ -21,34 +21,41 @@ import TurenLibrey.messages.dises;
  */
 public class turn {
 
-    public turn(board turnBoard, Game.color playerColor,sender playerSender, sender player2Sender) {
-        this.playerSender =playerSender;
+    public turn(board turnBoard, Game.color playerColor, sender playerSender, sender player2Sender) {
+        this.playerSender = playerSender;
+        this.player2Sender = player2Sender;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
 
-        steps=startSteps();
+        steps = startSteps();
         dises tmpDises = new dises(steps);
-        sendObject(14, tmpDises, 0);
-        
-        turnMove();
+        sendObject(14, tmpDises, 1, playerSender);
+        sendObject(14, tmpDises, 0, player2Sender);
+
+        status = chekForKills();
+
+        if (status == turnStatus.next) {
+            turnMove();
+        }
+
     }
 
-    
     /*    public turn(board GameBoard, color color) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
-    private sender playerSender;
+     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     }*/
+    private sender playerSender, player2Sender;
     private board turnBoard;
     private Game.color playerColor;
     private int numOfKills;
     private Move TheMove;
-    
+    private boolean iswait;
+    private turnStatus status;
+
     public ArrayList<Integer> steps = new ArrayList<Integer>();
 
-
     /**
-     * this is function thet give the steps,
+     * this is function thet give the steps, number btuein 1-6
      *
      * @return number btwine 1-6
      */
@@ -78,7 +85,6 @@ public class turn {
             }
         }
 
-       
         return tmp;
     }
 
@@ -117,8 +123,6 @@ public class turn {
             plase = 0;
         }
 
-
-        
         for (i = 0; i < 6; i++) {
             if (turnBoard.getStatus(num + i) == turnBoard.change(playerColor)) {
                 sum += turnBoard.getNum(num + i);
@@ -135,70 +139,117 @@ public class turn {
     /**
      * this function do the moves
      */
-    public int chekForKills(){
-    Move move;
-        if (getNumOfKills(playerColor) > 0) {
-            TheMove = new AfterKillMove(turnBoard, playerColor, steps);
-            // if still hve a kill pieces thet - 
-            if (getNumOfKills(playerColor) > 0) {
-                sendString(21, "you stiil have a kills",0);
-                return 0;
-            }
-            if(steps.size()==0){
-                sendString(22, "you don't have any more steps",0);
-                return 0;
-            }
-            
-        }
-        return 1;
-    }
-    
-    public void turnMove() {
-
-        Move move;
+    public turnStatus chekForKills() {
         //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
             TheMove = new AfterKillMove(turnBoard, playerColor, steps);
+
+            if (TheMove.isWait()) {
+                iswait = true;
+                sendId(23, playerSender);
+                return turnStatus.witeToAfterKill;
+            }
+
             // if still hve a kill pieces thet - 
             if (getNumOfKills(playerColor) > 0) {
-                return;
+                return turnStatus.finish;
+            }
+
+            if (steps.size() == 0) {
+                sendId(22, playerSender);
+                return turnStatus.finish;
+
             }
 
         }
+        return turnStatus.next;
+    }
+
+    public void turnMove() {
+
+        Move move;
+
         // if there is to meny pieces out of the aria
         if (chekTOout() > steps.size()) {
+            status = turnStatus.onlyMove;
             TheMove = new Move(turnBoard, playerColor, steps);
         } else {
+            if (chekTOout() == 0) {
+                status=turnStatus.onlyMoveToEnd;
+                TheMove = new moveToEnd(turnBoard, playerColor, steps);
 
-            while (steps.size() > 0) {
-                // chek evry step if cen move to end
-                if (chekTOout() == 0) {
-                    TheMove = new moveToEnd(turnBoard, playerColor,steps);
-                    break;
-                } else {
-                    TheMove = new Move(turnBoard, playerColor, steps.get(0));
-                    steps.remove(0);
-                }
+            } else {
+                status = turnStatus.needToCHeck;
+                TheMove = new Move(turnBoard, playerColor, steps.get(0));
+               
             }
+        }
+
+    }
+
+    public void doStep(int from, int to) {
+
+        switch (status) {
+
+            case witeToAfterKill:
+                TheMove.doStep(from, to);
+                if()
+                if (TheMove.isWait()) {
+
+                    return;
+                } else {
+
+                    turnMove();
+                }
+                break;
+
+            case onlyMove:
+                TheMove.doStep(from, to);
+                break;
+
+            case onlyMoveToEnd:
+                TheMove.doStep(from, to);
+                break;
+
+            case needToCHeck:
+                TheMove.doStep(from, to);
+                if (chekTOout() == 0) {
+                    TheMove = new moveToEnd(turnBoard, playerColor, steps);
+                    status = turnStatus.onlyMoveToEnd;
+                }
+                break;
+
+        }
+        
+        if (steps.size() == 0) {
+            sendId(11, playerSender);
+            status = turnStatus.finish; 
         }
     }
     
-    public void sendString (int id ,String toSed,int token){
-
-        Message tmp = new Message(id, (Object)toSed,token);
-        playerSender.setMessege(tmp);
-        playerSender.start();
+    public void sendSteps(){
     
+        while()
     }
-       public void sendObject (int id ,Object toSed,int token){
 
-        Message tmp = new Message(id,toSed,token);
-        playerSender.sendOBJ(toSed, id);
-    
+    public void sendObject(int id, Object toSed, int token, sender playerToSend) {
+
+        playerToSend.sendOBJ(toSed, id, token);
     }
-    enum turnStatus{
-    
+
+    public void sendId(int id, sender playerToSend) {
+
+        playerToSend.sendOBJ(null, id);
+    }
+
+    enum turnStatus {
+
+        next,
         witeToAfterKill,
-        
+        onlyMove,
+        onlyMoveToEnd,
+        needToCHeck,
+        finish
+
     }
 }

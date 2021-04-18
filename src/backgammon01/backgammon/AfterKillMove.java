@@ -5,6 +5,7 @@
  */
 package backgammon01.backgammon;
 
+import TurenLibrey.messages.Step;
 import backgammon01.Server.Game;
 import backgammon01.Server.Game.color;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class AfterKillMove extends Move {
      */
     public void initialization() {
 
+        option = false;
         if (thisColor == color.whith) {
            place = 1;
         } else {
@@ -47,6 +49,7 @@ public class AfterKillMove extends Move {
      * this function do the actually move
      */
     public void themove() {
+        Step tmp;
         boolean Bool1, Bool2;
         int numOfKill = super.moveBoard.getNum(place);
 
@@ -60,22 +63,30 @@ public class AfterKillMove extends Move {
         if (Bool1 && !Bool2) {
 
             super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+            tmp = new Step(0, place, place + steps.get(0));
+            moves.add(tmp);
             super.steps.remove(0);
         } else if (!Bool1 && Bool2) {
 
             super.moveBoard.theMove(thisColor, place, place + steps.get(1));
+            tmp = new Step(1, place, place + steps.get(0));
+            moves.add(tmp);
             super.steps.remove(1);
         } else if (Bool1 && Bool2) {
             if (numOfKill >= 2) {
-
+                int i =0;
                 while( numOfKill > 0 && super.steps.size() > 0) {
                     super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+                    tmp = new Step(i++, place, place + steps.get(0));
+                    moves.add(tmp);
                     super.steps.remove(0);
                 }
 
             } else {
                 if (steps.get(0) == steps.get(1)) {
                     super.moveBoard.theMove(thisColor, place, place + steps.get(0));
+                    tmp = new Step(0, place, place + steps.get(0));
+                    moves.add(tmp);
                     super.steps.remove(0);
                 } else {
                     option= true;
@@ -90,17 +101,22 @@ public class AfterKillMove extends Move {
     
     @Override
     public boolean doStep(int from, int stepToDo){
-    
+    Step tmp;
         if(from != -1){
             return false;
         }
         if(stepToDo != 0 && stepToDo != 1){
             return false;
         }
-        super.moveBoard.theMove(thisColor, place, place + super.steps.get(stepToDo));
-        steps.remove(stepToDo);
-        return true;
-        
+
+        if( super.moveBoard.theMove(thisColor, place, place + super.steps.get(stepToDo))){
+            tmp = new Step(stepToDo, place, place + steps.get(0));
+            moves.add(tmp);
+            steps.remove(stepToDo);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean isOption() {

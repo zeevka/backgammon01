@@ -35,6 +35,9 @@ public class board {
      */
     public boolean theMove(color thisColor, int out, int in) {
 
+        if(!chekForOut(out, thisColor)||!chekForIn(in, thisColor)){
+            return false;
+        }
         ColorStatus tmpColor = theBoard[in].getStatus();//the color of the square
         ColorStatus playerColor = change(thisColor);// the color of the flyer in colorStatus
 

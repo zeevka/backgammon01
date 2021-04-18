@@ -30,13 +30,6 @@ public class sender extends Thread {
 
     }
 
-    public sender(Socket net, String str, int id, int token) {
-        this.net = net;
-
-        messege = new Message(id, (Object) str, token);
-
-    }
-
     private Socket net;
     private ObjectOutputStream out;
     private Message messege;
@@ -51,7 +44,9 @@ public class sender extends Thread {
         }
         send(messege);
     }
-
+////////////////////////////////////////////////////////////////////////////////
+    //function
+    
     public void send(Message mes) {
 
         try {
@@ -61,18 +56,21 @@ public class sender extends Thread {
         }
     }
     
-    public void sendString(String str, int id, int token){
-    
-        Message  a = new Message(id, (Object) str, token);
-        send(a);
-    }
-    
     public void sendOBJ(Object obj, int id) {
 
         Message  a = new Message(id, obj, 0);
         send(a);
     }
+    
+        public void sendOBJ(Object obj, int id, int token) {
 
+        Message  a = new Message(id, obj, token);
+        send(a);
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+        //geter and seter
+        
     public Socket getNet() {
         return net;
     }

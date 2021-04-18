@@ -5,6 +5,7 @@
  */
 package backgammon01.backgammon;
 
+import TurenLibrey.messages.Step;
 import backgammon01.Server.Game;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ public class moveToEnd extends Move {
         super(moveBoard, thisColor);
         super.steps = steps;
         initialization();
-        mteMove();
+        if (!auto()) {
+            super.wait = true;
+        }
     }
     private int plase;
     private int plaseForFunk;
@@ -33,7 +36,7 @@ public class moveToEnd extends Move {
             index = 1;
         } else {
             plase = 0;
-            plaseForFunk = 7;
+            plaseForFunk = 8;
             index = -1;
         }
     }
@@ -43,21 +46,34 @@ public class moveToEnd extends Move {
      *
      * @return false if it not automaton
      */
-    public boolean auto(int limt) {
-        int tmp, numof = 0;
-        for (tmp = plaseForFunk; tmp != plase - limt - index; tmp += index) {
+    public boolean auto() {
+        int tmp, numof = 0, theTyni;
+        Step tmperry;
+
+        if (steps.size() > 1 && abs(steps.get(0)) > abs(steps.get(1))) {
+            theTyni = abs(steps.get(1));
+        } else {
+            theTyni = abs(steps.get(0));
+        }
+
+        for (tmp = plaseForFunk; tmp != plase - theTyni - index; tmp += index) {
 
             if (moveBoard.getStatus(tmp) == moveBoard.change(thisColor)) {// todo chek if after ove the square is empty
                 return false;
             }
         }
 
-        for (; tmp != plase - index; tmp += index) {
+        for (; tmp != plase - index && steps.size() > 0; tmp += index) {
             if (moveBoard.getStatus(tmp) == moveBoard.change(thisColor)) {
                 numof = moveBoard.getNum(tmp);
 
                 while (steps.size() > 0 && numof > 0) {
-                    moveBoard.theMove(thisColor, tmp, plase);
+                    if (!moveBoard.theMove(thisColor, tmp, plase)) {
+                        System.err.println("erorr in aoto movetoend");
+                        return false;
+                    }
+                    tmperry = new Step(0, tmp, plase);
+                    moves.add(tmperry);
                     steps.remove(0);
                     numof -= 1;
                 }
@@ -68,53 +84,11 @@ public class moveToEnd extends Move {
             }
         }
         return true;
-
-    }
-
-    /**
-     * this fonctin do the mive out
-     */
-    public void mteMove() {
-        int tmp, theBiger;
-        Scanner s = new Scanner(System.in);
-         
-        if (steps.size() > 1 && abs(steps.get(0)) > abs(steps.get(1))) {
-             theBiger = steps.get(1);
-        }else{
-            theBiger = steps.get(0);
-        }
-
-        while (steps.size() > 0) {
-
-            if (auto(theBiger)) {//if it automaton to take out brake..
-                break;
-            }
-            tmp = 0;
-            while (true) {
-                // tmp =lis.giv(0);
-                tmp = s.nextInt();
-                //first check if in square tmp there is piece   next- chek if there is optien to do it
-                if (moveBoard.chekForOut(tmp, thisColor) && (tmp + steps.get(0) >= 1 && tmp + steps.get(0) <= 26)) {
-                    if (tmp + steps.get(0) + index == plase) {
-                        moveBoard.theMove(thisColor, tmp, plase);
-                    } else {
-                        moveBoard.theMove(thisColor, tmp, tmp + steps.get(0));
-                    }
-                    steps.remove(0);
-                    break;
-                }
-                System.out.println("erorr");
-            }
-
-        }
-
     }
 
     @Override
     public boolean doStep(int from, int stepToDo) {
-        if (!moveBoard.chekForOut(from, thisColor)) {
-            return false;
-        }
+
         if (from + steps.get(stepToDo) <= 1 || from + steps.get(stepToDo) >= 26) {
             return false;
         }
@@ -126,8 +100,51 @@ public class moveToEnd extends Move {
             moveBoard.theMove(thisColor, from, from + steps.get(stepToDo));
         }
         steps.remove(stepToDo);
+        auto();
         return true;
     }
+    /**
+     * this fonctin do the mive out
+     */
+    /*    public void mteMove() {
+     int tmp, theTyni;
+     Scanner s = new Scanner(System.in);
+    
+     if (steps.size() > 1 && abs(steps.get(0)) > abs(steps.get(1))) {
+     theTyni = abs(steps.get(1));
+     } else {
+     theTyni = abs(steps.get(0));
+     }
+    
+     if (auto(theTyni)) {//if it automaton to take out brake..
+     return;
+     }
+     while (steps.size() > 0) {
+    
+     if (auto(theTyni)) {//if it automaton to take out brake..
+     break;
+     }
+     tmp = 0;
+     while (true) {
+     // tmp =lis.giv(0);
+     tmp = s.nextInt();
+     //first check if in square tmp there is piece   next- chek if there is optien to do it
+     if (moveBoard.chekForOut(tmp, thisColor) && (tmp + steps.get(0) >= 1 && tmp + steps.get(0) <= 26)) {
+     if (tmp + steps.get(0) + index == plase) {
+     moveBoard.theMove(thisColor, tmp, plase);
+     } else {
+     moveBoard.theMove(thisColor, tmp, tmp + steps.get(0));
+     }
+     steps.remove(0);
+     break;
+     }
+     System.out.println("erorr");
+     }
+    
+     }
+    
+     }*/
+
 }
 /*    public boolean chekTOout() {
     
