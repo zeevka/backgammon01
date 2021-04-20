@@ -57,8 +57,6 @@ public class Server {
             doValidation = null;
         
         }
-
-
     }
 }
         /*        while (true) {

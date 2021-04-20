@@ -107,6 +107,28 @@ public class Move {
         moveBoard.theMove(thisColor, tmp, tmp + thestep);
         }*/
     }
+
+    public ArrayList<Step> getMoves() {
+        return moves;
+    }
+
+    public void setMoves(ArrayList<Step> moves) {
+        this.moves = moves;
+    }
+        
+    public int getMovesSize() {
+        return moves.size();
+    }    
+    
+    public Step getStep(int stepIndex){
+    
+        return moves.get(stepIndex);
+    }
+    
+    public void removeStep(int stepIndex){
+    
+        moves.remove(stepIndex);
+    }
     
 }
 

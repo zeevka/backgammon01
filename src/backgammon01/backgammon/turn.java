@@ -35,6 +35,10 @@ public class turn {
 
         status = chekForKills();
 
+        if(TheMove.getMovesSize()>0){
+                
+                    sendSteps();
+                }
         if (status == turnStatus.next) {
             turnMove();
         }
@@ -111,7 +115,7 @@ public class turn {
      * @return the number of pieces thet is not
      *
      */
-    public int chekTOout() {
+    public int chekTOout(){
 
         int sum = 0, num, plase, i;
 
@@ -161,6 +165,8 @@ public class turn {
 
             }
 
+        }else{
+             TheMove = new Move(turnBoard, playerColor);
         }
         return turnStatus.next;
     }
@@ -187,13 +193,16 @@ public class turn {
 
     }
 
-    public void doStep(int from, int to) {
+    public void doStep(int from, int to, int step) {
+        // todo send  to client the risulte of do step
+        // todo if the resulte is true send the step
 
+        boolean flag;
         switch (status) {
 
             case witeToAfterKill:
-                TheMove.doStep(from, to);
-                if()
+                flag = TheMove.doStep(from, to);
+                
                 if (TheMove.isWait()) {
 
                     return;
@@ -204,15 +213,23 @@ public class turn {
                 break;
 
             case onlyMove:
-                TheMove.doStep(from, to);
+                flag = TheMove.doStep(from, to);
                 break;
 
             case onlyMoveToEnd:
-                TheMove.doStep(from, to);
+                flag = TheMove.doStep(from, to);
+                if(TheMove.getMovesSize()>0){
+                
+                    sendSteps();
+                }
                 break;
 
             case needToCHeck:
-                TheMove.doStep(from, to);
+                flag = TheMove.doStep(from, to);
+                if(TheMove.getMovesSize()>0){
+                
+                    sendSteps();
+                }
                 if (chekTOout() == 0) {
                     TheMove = new moveToEnd(turnBoard, playerColor, steps);
                     status = turnStatus.onlyMoveToEnd;
@@ -229,7 +246,13 @@ public class turn {
     
     public void sendSteps(){
     
-        while()
+        while(TheMove.getMovesSize()==0){
+        
+             sendObject(12,(Object)TheMove.getStep(0),1,playerSender);
+             sendObject(12,(Object)TheMove.getStep(0),0,player2Sender);
+            
+             TheMove.removeStep(0);
+        }
     }
 
     public void sendObject(int id, Object toSed, int token, sender playerToSend) {
