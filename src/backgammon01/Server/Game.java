@@ -7,11 +7,8 @@ package backgammon01.Server;
 
 import backgammon01.backgammon.board;
 import backgammon01.backgammon.turn;
-import java.io.IOException;
-import java.net.Socket;
+import TurenLibrey.messages.Matrix;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -61,7 +58,14 @@ public class Game extends Thread {
         player1.sendObject(10, null,10);
         player2.sendObject(10, null,11);
         System.out.println("GAME: send message");
+        
+        Matrix tmpMatrix = new Matrix(GameBoard.toIntArray());
+        
+        player1.sendObject(11, (Object) tmpMatrix, 0);
+        player2.sendObject(11, (Object) tmpMatrix, 0);
+        
     }
+    
 
     public enum color {
 

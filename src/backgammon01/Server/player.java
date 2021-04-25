@@ -58,9 +58,9 @@ public class player {
         
     }
     public void sendObject(int id ,Object toSed,int token){
-    
-        send = new sender(net, toSed,id,token);
-        send.start();
+    sender tmpSend;
+        tmpSend = new sender(net, toSed,id,token);
+        tmpSend.start();
     }
     
         

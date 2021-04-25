@@ -60,7 +60,7 @@ public class sender extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(sender.class.getName()).log(Level.SEVERE, null, ex);
         }
-        send(messege);
+        
     }
 ////////////////////////////////////////////////////////////////////////////////
     //function
