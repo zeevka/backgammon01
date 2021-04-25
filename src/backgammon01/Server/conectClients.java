@@ -74,10 +74,7 @@ public class conectClients extends Thread{
     }
     public void add(player toAdd){
     
-        players.add(toAdd);
-        System.out.println("adddddd");
-        
-        
+        players.add(toAdd);  
     }
     
 }

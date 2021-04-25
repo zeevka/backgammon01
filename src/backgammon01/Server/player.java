@@ -53,9 +53,14 @@ public class player {
     
     public void sendString(int id ,String toSed,int token){
 
-        send = new sender(net, (Object)toSed,id,token);
-        send.start();
+        System.err.println("erorrr send string");
+
         
+    }
+    public void sendObject(int id ,Object toSed,int token){
+    
+        send = new sender(net, toSed,id,token);
+        send.start();
     }
     
         

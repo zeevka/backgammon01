@@ -36,11 +36,11 @@ public class MessageHendler {
         
             case 110: 
                 Step a = (Step) obj;
-                theTurn.doStep(a.getFrom(),a.getTo());
+                theTurn.doStep(a.getFrom(),a.getTo(), a.getDise());
                 break;
                 
-        
-            
+                
+
         }
     
     }

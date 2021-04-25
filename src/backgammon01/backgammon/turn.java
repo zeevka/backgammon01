@@ -198,6 +198,22 @@ public class turn {
         // todo if the resulte is true send the step
 
         boolean flag;
+        
+        flag = TheMove.doStep(from, to);
+        if(flag){
+        
+            while(TheMove.getMovesSize()>0){
+                sendObject(15, TheMove.getStep(0), 1, playerSender);
+                sendObject(16, TheMove.getStep(0), 0, player2Sender);
+                TheMove.removeStep(0);
+            }
+            
+        }else{
+        
+        
+            sendId(17, playerSender);
+        }
+        
         switch (status) {
 
             case witeToAfterKill:
@@ -213,11 +229,11 @@ public class turn {
                 break;
 
             case onlyMove:
-                flag = TheMove.doStep(from, to);
+                
                 break;
 
             case onlyMoveToEnd:
-                flag = TheMove.doStep(from, to);
+                
                 if(TheMove.getMovesSize()>0){
                 
                     sendSteps();
@@ -225,7 +241,7 @@ public class turn {
                 break;
 
             case needToCHeck:
-                flag = TheMove.doStep(from, to);
+                
                 if(TheMove.getMovesSize()>0){
                 
                     sendSteps();
@@ -261,6 +277,11 @@ public class turn {
     }
 
     public void sendId(int id, sender playerToSend) {
+
+        playerToSend.sendOBJ(null, id);
+    }
+    
+    public void sendId(int id, sender playerToSend, int token) {
 
         playerToSend.sendOBJ(null, id);
     }

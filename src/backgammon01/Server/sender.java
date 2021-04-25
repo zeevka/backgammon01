@@ -29,6 +29,22 @@ public class sender extends Thread {
         messege = new Message(id, obj, token);
 
     }
+    public sender(Socket net, int id, int token) {
+        this.net = net;
+
+        messege = new Message(id, null, token);
+
+    }
+    public sender(Socket net, int id) {
+        this.net = net;
+
+        messege = new Message(id, null, -1);
+
+    }
+    public sender(Socket net, Message Message) {
+        this.net = net;
+        this.messege=Message;
+    }
 
     private Socket net;
     private ObjectOutputStream out;
@@ -38,7 +54,9 @@ public class sender extends Thread {
     public void run() {
         try {
             out = new ObjectOutputStream(net.getOutputStream());
-
+            out.writeObject(messege);
+            System.out.println("sender: send");
+            
         } catch (IOException ex) {
             Logger.getLogger(sender.class.getName()).log(Level.SEVERE, null, ex);
         }
