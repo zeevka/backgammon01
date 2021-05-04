@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import TurenLibrey.messages.Message;
+import backgammon01.backgammon.turn;
 import java.io.ObjectInputStream;
 
 /**
@@ -19,10 +20,17 @@ import java.io.ObjectInputStream;
  */
 public class Listener extends Thread {
 
-    public Listener(Socket client) throws IOException {
+    public Listener(Socket client){
+         
         this.client = client;
         messeges = new ArrayList<Message>();
-        in = new ObjectInputStream(client.getInputStream());
+
+    }
+    public Listener(Socket client, ObjectInputStream in) {
+         
+        this.client = client;
+        this.in = in;
+        messeges = new ArrayList<Message>();
 
     }
 
@@ -32,10 +40,17 @@ public class Listener extends Thread {
     private ArrayList<Message> messeges;
     private ArrayList<Integer> waits = new ArrayList<>();
     private boolean isCame;
+    private turn myturn;
 
     @Override
     public void run() {
-        theListener();
+        try {
+            in = new ObjectInputStream(client.getInputStream());
+            System.out.println("ss");
+            theListener();
+        } catch (IOException ex) {
+            Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void theListener() {
@@ -44,13 +59,15 @@ public class Listener extends Thread {
             tmp=null;
             try {
                 tmp = (Message) in.readObject();
+                MessageHendler hendler = new MessageHendler(tmp,myturn);
+                in = new ObjectInputStream(client.getInputStream());
             } catch (IOException ex) {
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            messeges.add(tmp);
+          
         }
 
     }
@@ -86,6 +103,11 @@ public class Listener extends Thread {
     public void setIsCame(boolean isCame) {
         this.isCame = isCame;
     }
+
+    public void setMyTurn(turn myTurn) {
+        this.myturn = myTurn;
+    }
+    
     
     
 

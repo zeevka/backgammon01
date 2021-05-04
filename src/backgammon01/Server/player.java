@@ -6,7 +6,12 @@
 package backgammon01.Server;
 
 import TurenLibrey.messages.Message;
+import backgammon01.backgammon.turn;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -63,6 +68,11 @@ public class player {
         tmpSend.start();
     }
     
+    public void setTurn(turn tmp){
+    
+        playerListiner.setMyTurn(tmp);
+        
+    }
         
     
     /////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +124,14 @@ public class player {
 
     public void setPlayerListiner(Listener playerListiner) {
         this.playerListiner = playerListiner;
+    }
+    
+    public void setlis(){
+           playerListiner = new Listener(net);
+    }
+    
+    public void setlis(ObjectInputStream in){
+           playerListiner = new Listener(net,in);
     }
     
     

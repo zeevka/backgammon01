@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Random;
 import TurenLibrey.messages.Message;
 import TurenLibrey.messages.dises;
+import backgammon01.Server.player;
 
 /**
  * for evry torn i open new object
@@ -21,9 +22,9 @@ import TurenLibrey.messages.dises;
  */
 public class turn {
 
-    public turn(board turnBoard, Game.color playerColor, sender playerSender, sender player2Sender) {
-        this.playerSender = playerSender;
-        this.player2Sender = player2Sender;
+    public turn(board turnBoard, Game.color playerColor, player playerSender, player player2Sender) {
+        this.player1 = playerSender;
+        this.player2 = player2Sender;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
         turnBoard.print();
@@ -38,7 +39,7 @@ public class turn {
         if(TheMove.getMovesSize()>0){
                 
                     sendSteps();
-                }
+        }
         if (status == turnStatus.next) {
             turnMove();
         }
@@ -48,7 +49,8 @@ public class turn {
     /*    public turn(board GameBoard, color color) {
      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
      }*/
-    private sender playerSender, player2Sender;
+    private player player1, player2;
+    
     private board turnBoard;
     private Game.color playerColor;
     private int numOfKills;
@@ -150,7 +152,7 @@ public class turn {
 
             if (TheMove.isWait()) {
                 iswait = true;
-                sendId(23, playerSender);
+                sendId(23, player1);
                 return turnStatus.witeToAfterKill;
             }
 
@@ -160,7 +162,7 @@ public class turn {
             }
 
             if (steps.size() == 0) {
-                sendId(22, playerSender);
+                sendId(22, player1);
                 return turnStatus.finish;
 
             }
@@ -203,15 +205,15 @@ public class turn {
         if(flag){
         
             while(TheMove.getMovesSize()>0){
-                sendObject(15, TheMove.getStep(0), 1, playerSender);
-                sendObject(16, TheMove.getStep(0), 0, player2Sender);
+                sendObject(15, TheMove.getStep(0), 1, player1);
+                sendObject(16, TheMove.getStep(0), 0, player2);
                 TheMove.removeStep(0);
             }
             
         }else{
         
         
-            sendId(17, playerSender);
+            sendId(17, player1);
         }
         
         switch (status) {
@@ -255,7 +257,7 @@ public class turn {
         }
         
         if (steps.size() == 0) {
-            sendId(11, playerSender);
+            sendId(11, player1);
             status = turnStatus.finish; 
         }
     }
@@ -264,26 +266,33 @@ public class turn {
     
         while(TheMove.getMovesSize()==0){
         
-             sendObject(12,(Object)TheMove.getStep(0),1,playerSender);
-             sendObject(12,(Object)TheMove.getStep(0),0,player2Sender);
+             sendObject(12,(Object)TheMove.getStep(0),1,player1);
+             sendObject(12,(Object)TheMove.getStep(0),0,player2);
             
              TheMove.removeStep(0);
         }
     }
-
-    public void sendObject(int id, Object toSed, int token, sender playerToSend) {
-
-        playerToSend.sendOBJ(toSed, id, token);
+    public void sendWait(){
+    
+        sendId(13, player1);
     }
 
-    public void sendId(int id, sender playerToSend) {
+    public void sendObject(int id, Object toSed, int token,player playerToSend) {
 
-        playerToSend.sendOBJ(null, id);
+       
+        playerToSend.sendObject(id, toSed, token);
+    }
+
+    public void sendId(int id, player playerToSend) {
+            playerToSend.sendObject(id, null, 0);
+        //playerToSend.sendOBJ(null, id);
+        
     }
     
-    public void sendId(int id, sender playerToSend, int token) {
+    public void sendId(int id, player playerToSend, int token) {
 
-        playerToSend.sendOBJ(null, id);
+         playerToSend.sendObject(id, null, token);
+       
     }
 
     enum turnStatus {

@@ -87,6 +87,7 @@ public class validation extends Thread {
                 System.out.println("player conect");
 
                 vladPlyer.setStatus(playerStatus.wait);
+                vladPlyer.setlis(in);
                 next.add(vladPlyer);
                 hello = new Message(5, null, 0);
                 

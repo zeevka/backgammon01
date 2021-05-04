@@ -35,18 +35,18 @@ public class Game extends Thread {
     private board GameBoard;
     private player player1, player2;
     private Listener lis1, lis2;
-    private turn c;
+    private turn wite, black;
 
     @Override
     public void run() {
-        /*        lis1.start();
-        lis2.start();
+        
         while (true) {
-        c = new turn(GameBoard, color.whith, lis1);
-        c = null;
-        c = new turn(GameBoard, color.black, lis2);
-        c = null;
-        }*/
+        wite = new turn(GameBoard, color.whith, player1, player2);
+        player1.setTurn(wite);
+        black = new turn(GameBoard, color.black, player2, player1);
+        player2.setTurn(black);
+        
+        }
     }
 
     private int getRand() {
@@ -64,6 +64,8 @@ public class Game extends Thread {
         player1.sendObject(11, (Object) tmpMatrix, 0);
         player2.sendObject(11, (Object) tmpMatrix, 0);
         
+        
+       
     }
     
 
@@ -107,12 +109,12 @@ public class Game extends Thread {
         this.lis2 = lis2;
     }
 
-    public turn getC() {
-        return c;
+    public turn getWite() {
+        return wite;
     }
 
     public void setC(turn c) {
-        this.c = c;
+        this.wite = c;
     }
 
 }

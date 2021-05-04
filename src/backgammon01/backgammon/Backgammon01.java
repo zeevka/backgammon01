@@ -26,7 +26,7 @@ public class Backgammon01 {
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-        // to do server !
+       
         // to do if isn't have any plase to move
 
         /*        player a = new player();

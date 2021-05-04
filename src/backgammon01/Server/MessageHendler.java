@@ -22,6 +22,13 @@ public class MessageHendler {
         this.obj= theMessage.getObj();
         
     }
+    public MessageHendler(Message theMessage, turn tmp) {
+        
+        this.theMessage = theMessage;
+        this.id = theMessage.getId();
+        this.obj= theMessage.getObj();
+        
+    }
   
     
     private Game playerGame;

@@ -273,10 +273,10 @@ public class board {
      * @return 
      */
     public int[] toIntArray() {
-        int[] send = new int[27];
+        int[] send = new int[28];
         int tmp;
 
-        for (int index = 0; index < 27; index++) {
+        for (int index = 0; index < 28; index++) {
 
             tmp=theBoard[index].getAmountOfPieces();
             
