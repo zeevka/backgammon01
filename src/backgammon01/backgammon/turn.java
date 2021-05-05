@@ -36,10 +36,6 @@ public class turn {
 
         status = chekForKills();
 
-        if(TheMove.getMovesSize()>0){
-                
-                    sendSteps();
-        }
         if (status == turnStatus.next) {
             turnMove();
         }
@@ -200,65 +196,64 @@ public class turn {
         // todo if the resulte is true send the step
 
         boolean flag;
-        
+
         flag = TheMove.doStep(from, to);
-        if(flag){
-        
-            while(TheMove.getMovesSize()>0){
+        if (flag) {
+
+            while (TheMove.getMovesSize() > 0) {
                 sendObject(15, TheMove.getStep(0), 1, player1);
                 sendObject(16, TheMove.getStep(0), 0, player2);
                 TheMove.removeStep(0);
             }
-            
-        }else{
-        
-        
+
+            switch (status) {
+
+                case witeToAfterKill:
+                    flag = TheMove.doStep(from, to);
+
+                    if (TheMove.isWait()) {
+
+                        return;
+                    } else {
+
+                        turnMove();
+                    }
+                    break;
+
+                case onlyMove:
+
+                    break;
+
+                case onlyMoveToEnd:
+
+                    if (TheMove.getMovesSize() > 0) {
+
+                        sendSteps();
+                    }
+                    break;
+
+                case needToCHeck:
+
+                    if (TheMove.getMovesSize() > 0) {
+
+                        sendSteps();
+                    }
+                    if (chekTOout() == 0) {
+                        TheMove = new moveToEnd(turnBoard, playerColor, steps);
+                        status = turnStatus.onlyMoveToEnd;
+                    }
+                    break;
+
+            }
+        } else {
+
             sendId(17, player1);
-        }
-        
-        switch (status) {
-
-            case witeToAfterKill:
-                flag = TheMove.doStep(from, to);
-                
-                if (TheMove.isWait()) {
-
-                    return;
-                } else {
-
-                    turnMove();
-                }
-                break;
-
-            case onlyMove:
-                
-                break;
-
-            case onlyMoveToEnd:
-                
-                if(TheMove.getMovesSize()>0){
-                
-                    sendSteps();
-                }
-                break;
-
-            case needToCHeck:
-                
-                if(TheMove.getMovesSize()>0){
-                
-                    sendSteps();
-                }
-                if (chekTOout() == 0) {
-                    TheMove = new moveToEnd(turnBoard, playerColor, steps);
-                    status = turnStatus.onlyMoveToEnd;
-                }
-                break;
 
         }
-        
+
         if (steps.size() == 0) {
             sendId(11, player1);
-            status = turnStatus.finish; 
+            status = turnStatus.finish;
         }
     }
     
@@ -295,7 +290,12 @@ public class turn {
        
     }
 
-    enum turnStatus {
+    public turnStatus getStatus() {
+        return status;
+    }
+    
+
+    public enum turnStatus {
 
         next,
         witeToAfterKill,

@@ -8,7 +8,12 @@ package backgammon01.Server;
 import backgammon01.backgammon.board;
 import backgammon01.backgammon.turn;
 import TurenLibrey.messages.Matrix;
+import backgammon01.backgammon.turn.turnStatus;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,6 +41,9 @@ public class Game extends Thread {
     private player player1, player2;
     private Listener lis1, lis2;
     private turn wite, black;
+    private Timer turnTimer;
+    private TimerTask turnTimerTask;
+    public int time;
 
     @Override
     public void run() {
@@ -43,9 +51,11 @@ public class Game extends Thread {
         while (true) {
         wite = new turn(GameBoard, color.whith, player1, player2);
         player1.setTurn(wite);
+        wait(wite);
+
         black = new turn(GameBoard, color.black, player2, player1);
         player2.setTurn(black);
-        
+        wait(black);
         }
     }
 
@@ -69,6 +79,36 @@ public class Game extends Thread {
     }
     
 
+    public void wait(turn toWait) {
+        time = 0;
+        turnTimer = new Timer();
+        turnTimerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                time++;
+                if (time == 120) {
+                    System.out.println("to long");
+                }
+            }
+        };
+        turnTimer.schedule(turnTimerTask, 1000, 250);
+        
+        while (toWait.getStatus() != turnStatus.finish) {
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    public void doTurn(color theturn){
+    
+        
+    }
+    
+    
     public enum color {
 
         whith,
