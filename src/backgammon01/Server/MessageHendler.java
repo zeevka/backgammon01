@@ -38,7 +38,9 @@ public class MessageHendler {
     private turn theTurn;
     
     public void hendler(){
+        
     boolean tmp;
+        System.out.println("get masseg: "+id);
         switch(id){
         
             case 110: 

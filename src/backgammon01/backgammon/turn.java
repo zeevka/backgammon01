@@ -7,13 +7,13 @@ package backgammon01.backgammon;
 
 import backgammon01.Server.Game;
 import backgammon01.Server.Game.color;
-import backgammon01.Server.sender;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import TurenLibrey.messages.Message;
 import TurenLibrey.messages.dises;
 import backgammon01.Server.player;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * for evry torn i open new object
@@ -22,31 +22,20 @@ import backgammon01.Server.player;
  */
 public class turn {
 
-    public turn(board turnBoard, Game.color playerColor, player playerSender, player player2Sender) {
-        this.player1 = playerSender;
-        this.player2 = player2Sender;
+    public turn(board turnBoard, Game.color playerColor, player player1, player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
         this.turnBoard = turnBoard;
         this.playerColor = playerColor;
+
         turnBoard.print();
 
-        steps = startSteps();
-        dises tmpDises = new dises(steps);
-        sendObject(14, tmpDises, 1, playerSender);
-        sendObject(14, tmpDises, 0, player2Sender);
-
-        status = chekForKills();
-
-        if (status == turnStatus.next) {
-            turnMove();
-        }
+        starting();
 
     }
 
-    /*    public turn(board GameBoard, color color) {
-     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-     }*/
     private player player1, player2;
-    
+
     private board turnBoard;
     private Game.color playerColor;
     private int numOfKills;
@@ -55,6 +44,25 @@ public class turn {
     private turnStatus status;
 
     public ArrayList<Integer> steps = new ArrayList<Integer>();
+
+    ////////////////////////////////////////////////////////////////
+    //-- function
+    
+    private void starting() {
+
+        steps = startSteps();
+        dises tmpDises = new dises(steps);
+        sendObject(14, tmpDises, 1, player1);
+        sendObject(14, tmpDises, 0, player2);
+
+        Iwait();
+
+        status = chekForKills();
+
+        if (status == turnStatus.next) {
+            turnMove();
+        }
+    }
 
     /**
      * this is function thet give the steps, number btuein 1-6
@@ -66,8 +74,17 @@ public class turn {
         return rand.nextInt(6) + 1;
     }
 
+    private void Iwait() {
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(turn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
-     * art the steps with random numbers, if has double thet need for steps
+     * start the steps with random numbers, if has double thet need for steps
      *
      * @return list with the numbers
      */
@@ -113,7 +130,7 @@ public class turn {
      * @return the number of pieces thet is not
      *
      */
-    public int chekTOout(){
+    public int chekTOout() {
 
         int sum = 0, num, plase, i;
 
@@ -131,61 +148,60 @@ public class turn {
             }
         }
         return (15 - turnBoard.getNum(plase) - sum);
-        /*        if (sum == (15-turnBoard.getNum(plase))) {
-         return true;
-         }
 
-         return false;*/
     }
 
     /**
-     * this function do the moves
+     * this function chek if there is kill pieces, if so thet
+     * @return 
      */
     public turnStatus chekForKills() {
+
+        turnStatus toReturn;
         //if there is eny kill pieces
         if (getNumOfKills(playerColor) > 0) {
             TheMove = new AfterKillMove(turnBoard, playerColor, steps);
+            automatic();
+            chekForFinish();
 
+            //if the client need to choose plase for is kill pice
             if (TheMove.isWait()) {
                 iswait = true;
-                sendId(23, player1);
-                return turnStatus.witeToAfterKill;
+                sendWait();
+                //sendId(23, player1);
+                toReturn = turnStatus.witeToAfterKill;
+
+                // if still hhve a kill pieces thet - 
+            } else if (getNumOfKills(playerColor) > 0) {
+                toReturn = turnStatus.finish;
+            } else {
+                toReturn = turnStatus.next;
             }
 
-            // if still hve a kill pieces thet - 
-            if (getNumOfKills(playerColor) > 0) {
-                return turnStatus.finish;
-            }
-
-            if (steps.size() == 0) {
-                sendId(22, player1);
-                return turnStatus.finish;
-
-            }
-
-        }else{
-             TheMove = new Move(turnBoard, playerColor);
+        } else {
+            toReturn = turnStatus.next;
         }
-        return turnStatus.next;
+        return toReturn;
     }
 
     public void turnMove() {
 
         Move move;
+        int toOut = chekTOout();
 
         // if there is to meny pieces out of the aria
-        if (chekTOout() > steps.size()) {
+        if (toOut > steps.size()) {
             status = turnStatus.onlyMove;
             TheMove = new Move(turnBoard, playerColor, steps);
         } else {
-            if (chekTOout() == 0) {
-                status=turnStatus.onlyMoveToEnd;
-                TheMove = new moveToEnd(turnBoard, playerColor, steps);
+            if (toOut == 0) {
+                status = turnStatus.onlyMoveToEnd;
+                newMoveToEndHendler();
 
             } else {
                 status = turnStatus.needToCHeck;
-                TheMove = new Move(turnBoard, playerColor, steps.get(0));
-               
+                TheMove = new Move(turnBoard, playerColor, steps);
+
             }
         }
 
@@ -198,49 +214,34 @@ public class turn {
         boolean flag;
 
         flag = TheMove.doStep(from, to);
-        if (flag) {
+        automatic();
+        if (TheMove.isWait()) {
+            sendWait();
+            return;
+        }
 
-            while (TheMove.getMovesSize() > 0) {
-                sendObject(15, TheMove.getStep(0), 1, player1);
-                sendObject(16, TheMove.getStep(0), 0, player2);
-                TheMove.removeStep(0);
-            }
+        if (flag) {
 
             switch (status) {
 
                 case witeToAfterKill:
-                    flag = TheMove.doStep(from, to);
-
-                    if (TheMove.isWait()) {
-
-                        return;
-                    } else {
-
-                        turnMove();
-                    }
+                    turnMove();
                     break;
 
                 case onlyMove:
-
-                    break;
-
                 case onlyMoveToEnd:
 
-                    if (TheMove.getMovesSize() > 0) {
-
-                        sendSteps();
-                    }
                     break;
 
                 case needToCHeck:
 
                     if (TheMove.getMovesSize() > 0) {
 
-                        sendSteps();
                     }
                     if (chekTOout() == 0) {
-                        TheMove = new moveToEnd(turnBoard, playerColor, steps);
+
                         status = turnStatus.onlyMoveToEnd;
+                        newMoveToEndHendler();
                     }
                     break;
 
@@ -251,49 +252,79 @@ public class turn {
 
         }
 
+        chekForFinish();
+    }
+
+    private void newMoveToEndHendler() {
+        TheMove = new moveToEnd(turnBoard, playerColor, steps);
+        automatic();
+        chekForFinish();
+    }
+    
+    private void newMoveHendler() {
+        TheMove = new Move(turnBoard, playerColor, steps);
+        sendWait();
+    }
+    
+
+    private void automatic() {
+
+        while (TheMove.getMovesSize() > 0) {
+            sendObject(15, TheMove.getStep(0), 1, player1);
+            sendObject(16, TheMove.getStep(0), 0, player2);
+            TheMove.removeStep(0);
+        }
+
+    }
+
+    private void chekForFinish() {
         if (steps.size() == 0) {
             sendId(11, player1);
             status = turnStatus.finish;
         }
     }
     
-    public void sendSteps(){
     
-        while(TheMove.getMovesSize()==0){
-        
-             sendObject(12,(Object)TheMove.getStep(0),1,player1);
-             sendObject(12,(Object)TheMove.getStep(0),0,player2);
-            
-             TheMove.removeStep(0);
-        }
-    }
-    public void sendWait(){
-    
+    public void sendWait() {
+
         sendId(13, player1);
     }
 
-    public void sendObject(int id, Object toSed, int token,player playerToSend) {
+    //////////////////////////////////////////////////////////////////////////////
+    //--send to the client
+    public void sendSteps() {
 
-       
+        while (TheMove.getMovesSize() == 0) {
+
+            sendObject(12, (Object) TheMove.getStep(0), 1, player1);
+            sendObject(12, (Object) TheMove.getStep(0), 0, player2);
+
+            TheMove.removeStep(0);
+        }
+    }
+
+
+    public void sendObject(int id, Object toSed, int token, player playerToSend) {
+
         playerToSend.sendObject(id, toSed, token);
     }
 
     public void sendId(int id, player playerToSend) {
-            playerToSend.sendObject(id, null, 0);
+        playerToSend.sendObject(id, null, 0);
         //playerToSend.sendOBJ(null, id);
-        
+
     }
-    
+
     public void sendId(int id, player playerToSend, int token) {
 
-         playerToSend.sendObject(id, null, token);
-       
+        playerToSend.sendObject(id, null, token);
+
     }
+////////////////////////////////////////////////////////////////////////////////
 
     public turnStatus getStatus() {
         return status;
     }
-    
 
     public enum turnStatus {
 
@@ -302,7 +333,8 @@ public class turn {
         onlyMove,
         onlyMoveToEnd,
         needToCHeck,
-        finish
+        finish,
+        win
 
     }
 }
