@@ -25,13 +25,7 @@ public class Backgammon01 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-
-       
-        // to do if isn't have any plase to move
-
-        /*        player a = new player();
-        mesLogin l = new mesLogin("aaa","aaa");
-        newPlyer n = new newPlyer(null, null, a);*/
+      // to do if isn't have any plase to move
         
       Server s = new Server();
     }

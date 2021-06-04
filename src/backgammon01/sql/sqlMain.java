@@ -38,9 +38,12 @@ public class sqlMain {
 
             return ps.executeQuery();
         } catch (ClassNotFoundException ex) {
+            System.err.println("1");
             Logger.getLogger(sqlMain.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+             System.err.println("2");
             Logger.getLogger(sqlMain.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
         return null;
     }

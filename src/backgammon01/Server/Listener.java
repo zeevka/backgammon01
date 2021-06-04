@@ -24,6 +24,7 @@ public class Listener extends Thread {
          
         this.client = client;
         messeges = new ArrayList<Message>();
+        System.out.println("error constractor");
 
     }
     public Listener(Socket client, ObjectInputStream in) {
@@ -44,32 +45,57 @@ public class Listener extends Thread {
 
     @Override
     public void run() {
-        try {
-            in = new ObjectInputStream(client.getInputStream());
-            System.out.println("ss");
-            theListener();
+        /*        try {
+        //in = new ObjectInputStream(client.getInputStream());
+        System.out.println("ss");
+        theListener();
         } catch (IOException ex) {
-            Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        theListener();
     }
 
     public void theListener() {
         Message tmp;
-        while (true) {
+        
             tmp=null;
             try {
-                tmp = (Message) in.readObject();
-                MessageHendler hendler = new MessageHendler(tmp,myturn);
+                /*                //Thread.sleep(25);
+                in = null;
+                Thread.sleep(25);
+                
                 in = new ObjectInputStream(client.getInputStream());
+                tmp = (Message) in.readObject();
+                System.out.println("get massege id: " + tmp.getId());
+                MessageHendler hendler = new MessageHendler(tmp,myturn);*/
+                listin();
             } catch (IOException ex) {
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println(" exit.............");
+                
             } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                System.err.println("thread catch");
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
             }
             
           
-        }
+        
 
+    }
+    
+    private void listin() throws InterruptedException, IOException, ClassNotFoundException{
+        Message tmp = null;
+        while (true) {            
+                //in = null;
+                Thread.sleep(25);
+                
+                //in = new ObjectInputStream(client.getInputStream());
+                tmp = (Message) in.readObject();
+                System.out.println("get massege id: " + tmp.getId());
+                MessageHendler hendler = new MessageHendler(tmp,myturn);
+        }
     }
     
     public Message getMesseg(int token){

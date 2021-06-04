@@ -5,8 +5,9 @@
  */
 package backgammon01.backgammon;
 
+import build.square;
 import backgammon01.Server.Game.color;
-import backgammon01.backgammon.square.ColorStatus;
+import build.square.ColorStatus;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ public class board {
     public board() {
         theBoard = new square[28];
         theBoard = startBord();
-       // theBoard= newBord();
+        //theBoard= newBord();
 
     }
 

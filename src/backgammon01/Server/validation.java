@@ -26,15 +26,17 @@ public class validation extends Thread {
     public validation(Socket client, conectClients next) {
         this.client = client;
         this.next = next;
-
-        System.out.println("new validation");
         vladPlyer = new player(client);
-        try {
-            out = new ObjectOutputStream(client.getOutputStream());
-            in = new ObjectInputStream(client.getInputStream());
+
+        /*       try {
+        
         } catch (IOException ex) {
-            Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+        Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        
     }
 
     private Socket client;
@@ -44,32 +46,48 @@ public class validation extends Thread {
     private Message tmp;
     private player vladPlyer;
     public conectClients next;
+    public sender send;
 
     @Override
     public void run() {
         try {
+            in = new ObjectInputStream(client.getInputStream());
+            Message gar = (Message)in.readObject();
+            //send = new sender(client, new Message(1, null, 333));
+            out = new ObjectOutputStream(client.getOutputStream());
+            vladPlyer.setOut(out);
+            vladPlyer.sendObject(1, null, 333);
             Dovalidation();
         } catch (IOException ex) {
             Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            System.err.println("theard catch");
+            Logger.getLogger(validation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void Dovalidation() throws IOException, ClassNotFoundException {
+    public void Dovalidation() throws IOException, ClassNotFoundException, InterruptedException {
 
-        hello = new Message(1, null, 333);
-        out.writeObject(hello);
-        System.out.println("welcome send");
-
+        /*        hello = new Message(1, null, 333);
+        send = new sender(client, hello);
+        send.start();*/
+      //  send = null;
+        System.out.println("send");//////////////////
         for (int i = 0; i < 3; i++) {
 
-            tmp = (Message) in.readObject();
+            //in = new ObjectInputStream(client.getInputStream());
+            tmp = null;
+            while (tmp == null) {
+               tmp = (Message) in.readObject();
+               Thread.sleep(25);
+            }
+            
             
 
             if (tmp.getId() == 2) {
                 mesLogin tmpMesLogin = (mesLogin) tmp.getObj();
-                System.out.println("client: "+tmpMesLogin.getId()+"  "+ tmpMesLogin.getPassword());
                 logIn logIn = new logIn(tmpMesLogin.getId(), tmpMesLogin.getPassword(), vladPlyer);
                 logIn.run();
             } else if (tmp.getId() == 3) {
@@ -78,8 +96,11 @@ public class validation extends Thread {
                 logUp.run();
             } else {
 
-                hello = new Message(-1, null, 0);
+                /*    hello = new Message(-1, null, 0);
                 out.writeObject(hello);
+                out.flush();*/
+                 vladPlyer.sendObject(-1, null, 0);
+                
 
             }
             //todo: wait the thread wil finish
@@ -91,21 +112,25 @@ public class validation extends Thread {
                 next.add(vladPlyer);
                 hello = new Message(5, null, 0);
                 
-                out.writeObject(hello);
+               // send = new sender(client, hello);
+                //send.start();
+               // send = null;
+                vladPlyer.sendObject(5, null, 0);
+                 
                 Thread.currentThread().stop();
             }else {
 
                 System.out.println("player f");
                 hello = new Message(-1, null, 0);
-                out.writeObject(hello);
+                vladPlyer.sendObject(-1, null, 0);
+               // send = new sender(client, hello);
+               // send.start();
+                //send = null;
 
             }
-            //logIn =(logIn) tmp.getObj();
 
         }
-
-        vladPlyer.sendString(-1, "sorry", 0);
-
+        vladPlyer.sendObject(-1, null, 0);
     }
 
 }

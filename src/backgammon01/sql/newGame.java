@@ -18,34 +18,49 @@ import java.util.logging.Logger;
  */
 public class newGame extends sqlMain implements Runnable{
 
-    public newGame(player player1, player player2) {
-        this.player1 = player1;
-        this.player2 = player2;
-        tokens[0]= ""+player1.getToken();
-        tokens[1]= ""+player2.getToken();
+    public newGame(int token1, int token2, GameSqlHendler game) {
+
+        this.game = game;
+        tokens =new String[2];
+        tokens[0]= ""+token1;
+        tokens[1]= ""+token2;
     }
 
-    private Game game;
+    private GameSqlHendler game;
     private ResultSet rs;
     private player player1,player2; 
-    private String[] tokens =new String[2];
+    private String[] tokens;
     
     
     public void run() {
         int tmp=0;
-       rs = whithResultSet("declare @tmp int exec @tmp= new_game ?,?"
-               + " select @tmp as tmp",tokens);
-       
+       rs = whithResultSet("declare @tmp int exec @tmp = new_game ? , ? "
+                         + " select @tmp as tmp",tokens);
         try {
-            tmp=rs.getInt("tmp");
+             while (rs.next()) {
+                tmp=rs.getInt("tmp");
+             }
         } catch (SQLException ex) {
+            System.err.println("database error");
             Logger.getLogger(newGame.class.getName()).log(Level.SEVERE, null, ex);
         }
        
         if(tmp!=0){
-            game.setA(tmp);
+            game.setGameId(tmp);
+        }else{
+            System.err.println("databas result set problem ");
         }
+        
        
     }
     
 }
+/*
+ rs = whithResultSet("declare @tmp int"
+                         + " declare @i1 int declare @i2 int"
+                         + " declare @s1 varchar(10) declare @s2 varchar(10)"
+                         + " set @s1 = ? set @s2 = ?"
+                         + " set @i1 = convert(INT,@s1) set @i2 = convert(INT,@s2)"
+                         + " exec @tmp = new_game @i1 , @i2 "
+                         + " select @tmp as tmp",tokens);
+*/

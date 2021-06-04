@@ -20,12 +20,12 @@ public class sender extends Thread {
 
     public sender(Socket net) {
         this.net = net;
-
     }
 
-    public sender(Socket net, Object obj, int id, int token) {
+    public sender(Socket net, Object obj, int id, int token, ObjectOutputStream out) {
         this.net = net;
-
+        this.out = out;
+        
         messege = new Message(id, obj, token);
 
     }
@@ -53,10 +53,10 @@ public class sender extends Thread {
     @Override
     public void run() {
         try {
-            out = new ObjectOutputStream(net.getOutputStream());
+           // out = new ObjectOutputStream(net.getOutputStream());
             out.writeObject(messege);
-            System.out.println("sender: send");
-            
+            out.flush();
+            System.err.println("send");
         } catch (IOException ex) {
             Logger.getLogger(sender.class.getName()).log(Level.SEVERE, null, ex);
         }

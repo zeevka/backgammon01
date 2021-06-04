@@ -9,6 +9,7 @@ import TurenLibrey.messages.Message;
 import backgammon01.backgammon.turn;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,8 @@ public class player {
     private playerStatus status;
     private sender send;
     private Listener playerListiner;
+    private ObjectOutputStream out;
+    
     
     
     public enum playerStatus{
@@ -56,15 +59,10 @@ public class player {
     //////////////////////////////////////////////////////////////////////////////////////
     //fonction
     
-    public void sendString(int id ,String toSed,int token){
 
-        System.err.println("erorrr send string");
-
-        
-    }
     public void sendObject(int id ,Object toSed,int token){
-    sender tmpSend;
-        tmpSend = new sender(net, toSed,id,token);
+        sender tmpSend;
+        tmpSend = new sender(net, toSed,id,token,out);
         tmpSend.start();
     }
     
@@ -132,6 +130,15 @@ public class player {
     
     public void setlis(ObjectInputStream in){
            playerListiner = new Listener(net,in);
+           playerListiner.start();
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public void setOut(ObjectOutputStream out) {
+        this.out = out;
     }
     
     

@@ -36,14 +36,19 @@ public class newPlyer extends sqlMain implements Runnable {
     @Override
     public void run() {
 
-        tmp = whithResultSet("declare @tmp int exec  new_player ?,?,@tmp output "
-                + "select @tmp as tmp", new String[]{name, password});
+       String[] sqlSt = new String[2];
+       sqlSt[0]=name;
+       sqlSt[1]=password;
+               
+        tmp = whithResultSet("declare @tmp int exec @tmp= new_player ?,? select @tmp as tmp", sqlSt);
+        
         try {
             if (tmp.next()) {
-                if (tmp.getInt("tmp") == 1) {
-                    player.setStatus(playerStatus.yes);
-                } else {
+                if (tmp.getInt("tmp") == 0) {
                     player.setStatus(playerStatus.no);
+                   
+                } else {
+                     player.setStatus(playerStatus.yes);
                 }
             } else {
                 System.err.println("problem");

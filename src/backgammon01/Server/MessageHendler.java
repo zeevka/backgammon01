@@ -20,14 +20,15 @@ public class MessageHendler {
         this.theMessage = theMessage;
         this.id = theMessage.getId();
         this.obj= theMessage.getObj();
-        
+        hendler();
     }
-    public MessageHendler(Message theMessage, turn tmp) {
+    public MessageHendler(Message theMessage, turn theTurn) {
         
         this.theMessage = theMessage;
         this.id = theMessage.getId();
         this.obj= theMessage.getObj();
-        
+        this.theTurn = theTurn;
+        hendler();
     }
   
     
@@ -45,7 +46,8 @@ public class MessageHendler {
         
             case 110: 
                 Step a = (Step) obj;
-                theTurn.doStep(a.getFrom(),a.getTo(), a.getDise());
+               //theTurn.doStep(a.getFrom(),a.getTo(), a.getDise());
+                theTurn.doStep(a);
                 break;
                 
                 

@@ -46,10 +46,8 @@ public class logIn extends sqlMain implements Runnable {
             System.out.println("sql:    no");
         } else {
             player.setStatus(playerStatus.yes);
-            System.out.println("sql:    yes");
         }
         player.setToken(token);
-        System.out.println(player.getStatus());
     }
 
 }

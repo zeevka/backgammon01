@@ -5,6 +5,7 @@
  */
 package backgammon01.backgammon;
 
+import TurenLibrey.messages.Step;
 import backgammon01.Server.Game;
 import backgammon01.Server.Game.color;
 import java.util.ArrayList;
@@ -186,13 +187,12 @@ public class turn {
 
     public void turnMove() {
 
-        Move move;
         int toOut = chekTOout();
 
         // if there is to meny pieces out of the aria
         if (toOut > steps.size()) {
             status = turnStatus.onlyMove;
-            TheMove = new Move(turnBoard, playerColor, steps);
+            newMoveHendler();
         } else {
             if (toOut == 0) {
                 status = turnStatus.onlyMoveToEnd;
@@ -200,37 +200,48 @@ public class turn {
 
             } else {
                 status = turnStatus.needToCHeck;
-                TheMove = new Move(turnBoard, playerColor, steps);
+                newMoveHendler();
 
             }
         }
 
     }
 
-    public void doStep(int from, int to, int step) {
+    public void doStep(Step a) {
         // todo send  to client the risulte of do step
         // todo if the resulte is true send the step
 
+        int from, to, step;
+        from = a.getFrom();
+        step =  a.getDise();
+       // ,a.getTo(), a.getDise()
         boolean flag;
 
-        flag = TheMove.doStep(from, to);
+        flag = TheMove.doStep(from, step);
         automatic();
         if (TheMove.isWait()) {
             sendWait();
-            return;
+           
         }
 
+        System.out.println(flag);
+        chekForFinish();
         if (flag) {
 
+            sendObject(30, a, 1, player1);
+            sendObject(30, a, 0, player2);
             switch (status) {
 
                 case witeToAfterKill:
+                    if (TheMove.isWait()) {
+                    return;
+                    }
                     turnMove();
                     break;
 
                 case onlyMove:
                 case onlyMoveToEnd:
-
+                    sendWait();
                     break;
 
                 case needToCHeck:
@@ -252,39 +263,55 @@ public class turn {
 
         }
 
-        chekForFinish();
     }
 
+    /**
+     * this method hendl the new move to end and chek if ther is automatic moves to do
+     */
     private void newMoveToEndHendler() {
         TheMove = new moveToEnd(turnBoard, playerColor, steps);
         automatic();
         chekForFinish();
     }
     
+    /**
+     * this method hendl the new move and send to the client thet the server is wait
+     */
     private void newMoveHendler() {
         TheMove = new Move(turnBoard, playerColor, steps);
         sendWait();
     }
     
-
+    /**
+     * this method check  if ther is a automatic moves thet make 
+     */
     private void automatic() {
-
+sendSteps();
         while (TheMove.getMovesSize() > 0) {
-            sendObject(15, TheMove.getStep(0), 1, player1);
+            
+            /*System.err.println("autu");
+            sendSteps();
+            System.err.println("autu 2");*/
+            /*            sendObject(15, TheMove.getStep(0), 1, player1);
             sendObject(16, TheMove.getStep(0), 0, player2);
-            TheMove.removeStep(0);
+            TheMove.removeStep(0);*/
+            
         }
 
     }
-
+    
+    /**
+     * this method check  if thet isnt moves any more
+     */
     private void chekForFinish() {
         if (steps.size() == 0) {
-            sendId(11, player1);
             status = turnStatus.finish;
         }
     }
     
-    
+    /**
+     * this method send to the client thet the server is waiting
+    */
     public void sendWait() {
 
         sendId(13, player1);
@@ -294,27 +321,40 @@ public class turn {
     //--send to the client
     public void sendSteps() {
 
-        while (TheMove.getMovesSize() == 0) {
+        while (TheMove.getMovesSize() != 0) {
 
             sendObject(12, (Object) TheMove.getStep(0), 1, player1);
             sendObject(12, (Object) TheMove.getStep(0), 0, player2);
 
             TheMove.removeStep(0);
+            try {
+                Thread.sleep(25);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(turn.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-
+    /**
+     * this method send object to the client
+    */
     public void sendObject(int id, Object toSed, int token, player playerToSend) {
 
         playerToSend.sendObject(id, toSed, token);
     }
 
+    /**
+     * this method send id to the client
+    */
     public void sendId(int id, player playerToSend) {
         playerToSend.sendObject(id, null, 0);
         //playerToSend.sendOBJ(null, id);
 
     }
 
+    /**
+     * this method send id and token to the client
+    */
     public void sendId(int id, player playerToSend, int token) {
 
         playerToSend.sendObject(id, null, token);
@@ -326,15 +366,18 @@ public class turn {
         return status;
     }
 
+    /**
+     * this is a enum for the option of the turn
+     */
     public enum turnStatus {
 
-        next,
-        witeToAfterKill,
-        onlyMove,
-        onlyMoveToEnd,
-        needToCHeck,
-        finish,
-        win
+        next,//- if the turn wait to move from the client
+        witeToAfterKill,//-- if the turn wait to after kill move from the client
+        onlyMove,//-- if the turn wait to regular move from the client
+        onlyMoveToEnd,//-- if the turn wait to move to end from the client
+        needToCHeck,//-- if the turn wait to regular move and after this need to check if there is move to end
+        finish,//- if the turn is finish
+        win//-- if the client is win
 
     }
 }
